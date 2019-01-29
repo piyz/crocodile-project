@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <title>Main page</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}" />
+    <link rel="stylesheet" th:href="@{/bootstrap/css/bootstrap.min.css}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.4/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
+</head>
+<body>
+
+<nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">WebSiteName</a>
+        </div>
+
+        <ul class="nav navbar-nav navbar-right">
+            <li><a href="#"><span id="username" th:utext="${username}"></span></a></li>
+            <li><a th:href="@{/logout}">Logout</a></li>
+        </ul>
+    </div>
+</nav>
+
+<div class="container">
+
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <span id="time">00:05</span>
+                    <table>
+                        <tr>
+                            <td><button type="button" class="btn btn-primary btn-lg" id="guess-button-id-1"></button></td>
+                        </tr>
+                        <tr>
+                            <td><button type="button" class="btn btn-primary btn-lg" id="guess-button-id-2"></button></td>
+                        </tr>
+                        <tr>
+                            <td><button type="button" class="btn btn-primary btn-lg" id="guess-button-id-3"></button></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="endModal" class="modal">
+        <div id="modal-cont" class="modal-content">
+            <!--<span class="close">&times;</span>-->
+        </div>
+    </div>
+
+    <div id="table" th:if="${not #lists.isEmpty(listRooms)}">
+        <table class="table table-sm">
+            <thead class="thead-dark">
+            <tr>
+                <th>Id</th>
+                <th>RoomName</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tr th:each="room : ${listRooms}" th:if="${room.isOpen()}">
+                <td th:text="${room.roomId}" id="roomId"></td>
+                <td th:text="${room.roomName}"></td>
+                <!--<td th:if="${room.password.isEmpty()}">NO</td>
+                <td th:if="${!room.password.isEmpty()}">YES</td>-->
+                <td>
+                    <button class="btn btn-outline-dark" type="button" th:value="${room.roomId}" onclick="connecting(this)">Join</button>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div id="canvas-form" class="hidden">
+        <canvas id="drawing" width="600" height="600" style="pointer-events: none; border: 1px solid black" ></canvas>
+
+        <button id="reset" type="reset" class="btn btn-circle" onclick="clearCanvas()" style="background-color: grey"></button>
+
+        <button id="red" type="submit" class="btn btn-circle" style="background-color: indianred"></button>
+        <button id="yellow" type="submit" class="btn btn-circle" style="background-color: yellow"></button>
+        <button id="blue" type="submit" class="btn btn-circle" style="background-color: deepskyblue"></button>
+        <button id="black" type="submit" class="btn btn-circle" style="background-color: black"></button>
+    </div>
+
+    <div id="chat-page" class="hidden">
+        <div class="chat-container">
+            <div class="chat-header">
+                <h2>Chatroom [<span id="room-id-display"></span>]</h2>
+                <h2 class="hidden">Guess [<span id="guess-id-display"></span>]</h2>
+                <h4 id="guess-window-id" class="hidden"></h4>
+                <h4 id="guess-window-open-id"></h4>
+                <span id="timer">02:00</span>
+            </div>
+            <div class="connecting">
+                Connecting...
+            </div>
+            <ul id="messageArea">
+
+            </ul>
+            <form id="messageForm" name="messageForm" nameForm="messageForm">
+                <div class="form-group">
+                    <div class="input-group clearfix">
+                        <input type="text" id="message" autocomplete="off" class="form-control"/>
+                        <button type="submit" class="primary">Send</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="footer">
+        <button id="unsub" type="button" onclick="unsub()" class="hidden">exit</button>
+        <div id="userlist" class="hidden"></div>
+    </div>
+
+</div>
+<script th:src="@{/js/main.js}"></script>
+</body>
+</html>
