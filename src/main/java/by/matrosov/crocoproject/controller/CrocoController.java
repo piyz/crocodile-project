@@ -1,10 +1,16 @@
 package by.matrosov.crocoproject.controller;
 
 import by.matrosov.crocoproject.model.Room;
+import by.matrosov.crocoproject.model.User;
 import by.matrosov.crocoproject.repository.RoomRepository;
+import by.matrosov.crocoproject.service.room.RoomService;
+import by.matrosov.crocoproject.service.user.UserService;
+import by.matrosov.crocoproject.validator.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -15,7 +21,13 @@ import java.util.List;
 public class CrocoController {
 
     @Autowired
-    private RoomRepository roomRepository;
+    private RoomService roomService;
+
+    @Autowired
+    private UserValidator userValidator;
+
+    @Autowired
+    private UserService userService;
 
     @RequestMapping(value = {"/", "/index"}, method = RequestMethod.GET)
     public String index(Model model, Principal principal){
@@ -24,10 +36,26 @@ public class CrocoController {
             return "redirect:/login";
         }
 
-        List<Room> rooms = roomRepository.findAll();
+        List<Room> rooms = roomService.getAll();
         model.addAttribute("listRooms", rooms);
         model.addAttribute("username", username);
 
         return "index";
+    }
+
+    @RequestMapping(value = "/registration", method = RequestMethod.GET)
+    public String registrationForm(Model model){
+        model.addAttribute("user", new User());
+        return "registration";
+    }
+
+    @RequestMapping(value = "/registration", method = RequestMethod.POST)
+    public String registerUserAccount(@ModelAttribute("user") User user, BindingResult result){
+        userValidator.validate(user, result);
+        if (result.hasErrors()){
+            return "registration";
+        }
+        userService.save(user);
+        return "success";
     }
 }
