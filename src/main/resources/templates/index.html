@@ -61,7 +61,7 @@
             <tr>
                 <th>Id</th>
                 <th>RoomName</th>
-                <th>Action</th>
+                <th>Actions</th>
             </tr>
             </thead>
             <tr th:each="room : ${listRooms}" th:if="${room.isOpen()}">
@@ -71,6 +71,7 @@
                 <td th:if="${!room.password.isEmpty()}">YES</td>-->
                 <td>
                     <button class="btn btn-outline-dark" type="button" th:value="${room.roomId}" onclick="connecting(this)">Join</button>
+                    <button class="btn btn-outline-dark" type="button" th:value="${room.roomId}">Rename</button>
                 </td>
             </tr>
         </table>

@@ -1,29 +1,38 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Registration page</title>
-</head>
-<body>
-<p>Registration form</p>
-<form th:action="@{/registration}" th:object="${user}" method="post">
-    <div>
-        <label>Username</label>
-        <input type="text" th:field="*{username}"/>
-        <label th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></label>
-    </div>
-    <div>
-        <label>Password</label>
-        <input type="password" th:field="*{password}"/>
-        <label th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></label>
-    </div>
-    <div>
-        <label>Confirm Password</label>
-        <input type="password" th:field="*{passwordConfirm}"/>
-        <label th:if="${#fields.hasErrors('passwordConfirm')}" th:errors="*{passwordConfirm}"></label>
-    </div>
-    <button type="submit">Submit</button>
-</form>
 
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <title>Registration Page</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}" />
+    <link rel="stylesheet" th:href="@{/bootstrap/css/bootstrap.min.css}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
+</head>
+
+<body class="text-center">
+    <form class="form-signin" th:action="@{/registration}" th:object="${user}" method="post">
+
+        <h1 class="h3 mb-3 font-weight-normal">Please register yourself</h1>
+
+        <div class="form-group">
+            <input type="text" class="form-control" placeholder="Enter username" aria-describedby="usernameHelp" th:field="*{username}"/>
+            <small id="usernameHelp" class="form-text text-muted">придумайте себе интересный никнэйм</small>
+            <label th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></label>
+        </div>
+
+        <div class="form-group">
+            <input type="password" class="form-control" placeholder="Password" th:field="*{password}"/>
+            <label th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></label>
+        </div>
+
+        <div class="form-group">
+            <input type="password" class="form-control" placeholder="Confirm password" th:field="*{passwordConfirm}"/>
+            <label th:if="${#fields.hasErrors('passwordConfirm')}" th:errors="*{passwordConfirm}"></label>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
 </body>
 </html>

@@ -284,11 +284,9 @@ button.accent {
 
 .form-signin{
     width: 25%;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    margin-top: -100px;
-    margin-left: -166px;
+    position: absolute;
+    top: 33%;
+    left: 37%;
 }
 
 .footer{

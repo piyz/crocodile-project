@@ -21,5 +21,9 @@ public class DictionaryValidator implements Validator {
         if (dictionary.getValue().length() < 3 || dictionary.getValue().length() > 32) {
             errors.rejectValue("value", "Size.Dictionary.value");
         }
+
+        if (dictionary.getValue().trim().contains(" ")){
+            errors.rejectValue("value", "Whitespaces.Dictionary.value");
+        }
     }
 }
