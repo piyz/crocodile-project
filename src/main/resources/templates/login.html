@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <title>Chat Application</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}" />
+    <link rel="stylesheet" th:href="@{/bootstrap/css/bootstrap.min.css}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
+</head>
+<body class="text-center">
+<form class="form-signin" th:action="@{/login}" method="post">
+
+    <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
+
+    <input type="text" name="username" class="form-control" placeholder="Username" required="" autofocus="">
+
+    <input type="password" name="password" class="form-control" placeholder="Password" required="">
+
+    <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+
+    <a th:href="@{/registration}">Go to registration</a>
+</form>
+</body>
+</html>

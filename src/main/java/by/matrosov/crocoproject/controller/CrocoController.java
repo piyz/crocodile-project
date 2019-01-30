@@ -29,7 +29,12 @@ public class CrocoController {
     @Autowired
     private UserService userService;
 
-    @RequestMapping(value = {"/", "/index"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/login", "/", "/logout"}, method = RequestMethod.GET)
+    public String loginPage(){
+        return "login";
+    }
+
+    @RequestMapping(value = "/index", method = RequestMethod.GET)
     public String index(Model model, Principal principal){
         String username = principal.getName();
         if (username == null || username.isEmpty()){
