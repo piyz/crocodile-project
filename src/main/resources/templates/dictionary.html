@@ -16,7 +16,8 @@
         <h1 class="h3 mb-3 font-weight-normal">Add some new words</h1>
 
         <div class="form-group">
-            <input type="text" class="form-control" placeholder="Enter any word" th:field="*{value}"/>
+            <input type="text" class="form-control" placeholder="Enter any word" aria-describedby="dictionaryHelp" th:field="*{value}"/>
+            <small id="dictionaryHelp" class="form-text text-muted">на данный момент в базе <span th:utext="${count}"></span> слов</small>
             <label th:if="${#fields.hasErrors('value')}" th:errors="*{value}"></label>
         </div>
 

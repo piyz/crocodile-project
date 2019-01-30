@@ -74,6 +74,8 @@ public class CrocoController {
 
     @RequestMapping(value = "/dictionary", method = RequestMethod.GET)
     public String dictionaryForm(Model model){
+        long count = dictionaryService.count();
+        model.addAttribute("count", count);
         model.addAttribute("dictionary", new Dictionary());
         return "dictionary";
     }

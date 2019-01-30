@@ -15,4 +15,9 @@ public class DictionaryServiceImpl implements DictionaryService{
     public void save(Dictionary dictionary) {
         dictionaryRepository.save(dictionary);
     }
+
+    @Override
+    public long count() {
+        return dictionaryRepository.count();
+    }
 }
