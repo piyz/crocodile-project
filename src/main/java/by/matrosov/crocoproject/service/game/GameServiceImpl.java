@@ -33,7 +33,9 @@ public class GameServiceImpl implements GameService{
     public synchronized void removeUser(String username, String roomid) {
         Map<String, Integer> innerMap = mapMap.get(roomid);
 
-        innerMap.remove(username);
+        if (username != null){
+            innerMap.remove(username);
+        }
     }
 
     @Override

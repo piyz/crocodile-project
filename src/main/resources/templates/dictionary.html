@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Dictionary page</title>
+</head>
+<body>
+<p>Add some new words</p>
+    <form th:action="@{/dictionary}" th:object="${dictionary}" method="post">
+        <div>
+            <label>Value</label>
+            <input type="text" th:field="*{value}"/>
+            <label th:if="${#fields.hasErrors('value')}" th:errors="*{value}"></label>
+        </div>
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html>

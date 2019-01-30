@@ -1,10 +1,12 @@
 package by.matrosov.crocoproject.controller;
 
+import by.matrosov.crocoproject.model.Dictionary;
 import by.matrosov.crocoproject.model.Room;
 import by.matrosov.crocoproject.model.User;
-import by.matrosov.crocoproject.repository.RoomRepository;
+import by.matrosov.crocoproject.service.dictionary.DictionaryService;
 import by.matrosov.crocoproject.service.room.RoomService;
 import by.matrosov.crocoproject.service.user.UserService;
+import by.matrosov.crocoproject.validator.DictionaryValidator;
 import by.matrosov.crocoproject.validator.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -27,7 +29,13 @@ public class CrocoController {
     private UserValidator userValidator;
 
     @Autowired
+    private DictionaryValidator dictionaryValidator;
+
+    @Autowired
     private UserService userService;
+
+    @Autowired
+    private DictionaryService dictionaryService;
 
     @RequestMapping(value = {"/login", "/", "/logout"}, method = RequestMethod.GET)
     public String loginPage(){
@@ -62,5 +70,21 @@ public class CrocoController {
         }
         userService.save(user);
         return "success";
+    }
+
+    @RequestMapping(value = "/dictionary", method = RequestMethod.GET)
+    public String dictionaryForm(Model model){
+        model.addAttribute("dictionary", new Dictionary());
+        return "dictionary";
+    }
+
+    @RequestMapping(value = "/dictionary", method = RequestMethod.POST)
+    public String addDictionaryValue(@ModelAttribute("dictionary") Dictionary dictionary, BindingResult result){
+        dictionaryValidator.validate(dictionary, result);
+        if (result.hasErrors()){
+            return "dictionary";
+        }
+        dictionaryService.save(dictionary);
+        return "redirect:/dictionary";
     }
 }
