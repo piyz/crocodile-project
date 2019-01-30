@@ -54,6 +54,8 @@ public class WebSocketController {
 
         //send message to the chat
         messagingTemplate.convertAndSend(String.format("/topic/%s/public", roomId), chatMessage);
+        //remove back sender
+        chatMessage.setSender(chatMessage.getSender().split("#")[0]);
 
         if (prevUser != null){
             //add score

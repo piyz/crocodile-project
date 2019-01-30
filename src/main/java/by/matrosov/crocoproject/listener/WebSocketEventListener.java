@@ -79,9 +79,8 @@ public class WebSocketEventListener {
         if (username != null) {
             logger.info("User Disconnected: " + username);
             roomLeft(username, roomId);
+            gameService.removeUser(username, roomId);
         }
-
-        //TODO remove from the map
     }
 
     private void roomLeft(String username, String roomId){

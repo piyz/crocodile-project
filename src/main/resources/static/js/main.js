@@ -406,6 +406,8 @@ function sendMessage(event) {
 
         if (chatMessage.content === guessIdDisplay.textContent) {
 
+            let answer = chatMessage.content;
+
             //clear guessdidsplay
             stompClient.send(`${path}/guessDisplay`, {});
 
@@ -422,7 +424,7 @@ function sendMessage(event) {
             stompClient.send(`${path}/timer`, {});
 
             stompClient.send(`${path}/changeDrawUser`, {}, JSON.stringify({
-                sender: username,
+                sender: username + "#" + answer,
                 content : drawUser,
                 type: 'GUESS'
             }));
@@ -451,7 +453,7 @@ function onMessageReceived(payload) {
         message.content = message.sender + ' left!';
     } else if (message.type === "GUESS") {
         messageElement.classList.add('event-message');
-        message.content = message.sender + ' type right answer!';
+        message.content = message.sender.split("#")[0] + ' отгадал ' + message.sender.split("#")[1].toUpperCase();
     } else {
         messageElement.classList.add('chat-message');
 
@@ -488,3 +490,6 @@ function getAvatarColor(messageSender) {
 }
 
 messageForm.addEventListener('submit', sendMessage, true);
+
+//disable back button in browser
+window.onbeforeunload = function() { return "Your work will be lost."; };
