@@ -206,10 +206,20 @@ function enterRoom(roomId) {
     stompClient.send(`${path}/score`);
 }
 
+//let currentUsers = document.querySelector('#currentUsers');
 function onScore(payload) {
     let message = JSON.parse(payload.body);
-    userList.innerText = "";
-    userList.appendChild(document.createElement('td').appendChild(document.createTextNode(message.content)));
+    userList.innerHTML = "";
+    let users = message.content.slice(1,-1).split(",");
+    for (let i = 0; i < users.length; i++) {
+        let messageElement = document.createElement('li');
+        messageElement.classList.add();
+        let usernameElement = document.createElement('span');
+        let usernameText = document.createTextNode(users[i].replace("="," "));
+        usernameElement.appendChild(usernameText);
+        messageElement.appendChild(usernameElement);
+        userList.appendChild(messageElement);
+    }
 }
 
 function onEnd(payload) {

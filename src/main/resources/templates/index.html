@@ -18,6 +18,10 @@
             <a class="navbar-brand" href="#">WebSiteName</a>
         </div>
 
+        <div id="unsub" class="hidden">
+            <button type="button" onclick="unsub()" class="btn btn-primary btn-arrow-left">КНОПКА НАЗАД</button>
+        </div>
+
         <ul class="nav navbar-nav navbar-right">
             <li><a href="#"><span id="username" th:utext="${username}"></span></a></li>
             <li><a th:href="@{/logout}">Logout</a></li>
@@ -117,9 +121,10 @@
         </div>
     </div>
 
-    <div class="footer">
-        <button id="unsub" type="button" onclick="unsub()" class="hidden">КНОПКА НАЗАД</button>
-        <div id="userlist" class="hidden"></div>
+    <div class="container">
+        <ul id="userlist" class="hidden">
+
+        </ul>
     </div>
 
 </div>
