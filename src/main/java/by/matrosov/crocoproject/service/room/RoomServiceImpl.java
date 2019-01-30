@@ -17,4 +17,17 @@ public class RoomServiceImpl implements RoomService {
     public List<Room> getAll() {
         return roomRepository.findAll();
     }
+
+    @Override
+    public void changeRoomState(long roomid) {
+        Room room2update = roomRepository.getRoomByRoomId(roomid);
+
+        if (room2update.isOpen()){
+            room2update.setOpen(false);
+        }else {
+            room2update.setOpen(true);
+        }
+
+        roomRepository.save(room2update);
+    }
 }

@@ -8,4 +8,5 @@ import java.util.List;
 @Service
 public interface RoomService {
     List<Room> getAll();
+    void changeRoomState(long roomid);
 }
