@@ -87,12 +87,12 @@
     <div id="canvas-form" class="hidden">
         <canvas id="drawing" width="600" height="600" style="pointer-events: none; border: 1px solid black" ></canvas>
 
-        <button id="reset" type="reset" class="btn btn-circle" onclick="clearCanvas()" style="background-color: grey"></button>
-
-        <button id="red" type="submit" class="btn btn-circle" style="background-color: indianred"></button>
-        <button id="yellow" type="submit" class="btn btn-circle" style="background-color: yellow"></button>
-        <button id="blue" type="submit" class="btn btn-circle" style="background-color: deepskyblue"></button>
-        <button id="black" type="submit" class="btn btn-circle" style="background-color: black"></button>
+        <button id="resetButton" class="btn btn-light" onclick="clearCanvas()" disabled>Clear</button>
+        <button id="red" type="submit" class="btn btn-outline-danger">Red</button>
+        <button id="green" type="submit" class="btn btn-outline-success">Green</button>
+        <button id="blue" type="submit" class="btn btn-outline-primary" >Blue</button>
+        <button id="yellow" type="submit" class="btn btn-outline-warning" >Yellow</button>
+        <button id="black" type="submit" class="btn btn-outline-dark">Black</button>
     </div>
 
     <div id="chat-page" class="hidden">

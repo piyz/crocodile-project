@@ -25,6 +25,7 @@ let queueSubscription;
 let scoreSubscription;
 let timerSubscription;
 let guessIdDisplaySubscription;
+let resetCanvasSubscription;
 let path = null;
 
 let canvasForm = document.getElementById('canvas-form');
@@ -96,6 +97,7 @@ document.getElementById("red").addEventListener("click", function () {context.st
 document.getElementById("yellow").addEventListener("click", function () {context.strokeStyle = "#F0DE10"});
 document.getElementById("blue").addEventListener("click", function () {context.strokeStyle = "#001FF0"});
 document.getElementById("black").addEventListener("click", function () {context.strokeStyle = "#090607"});
+document.getElementById("green").addEventListener("click", function () {context.strokeStyle = "#1e8118"});
 function onDraw(payload){
     let message = JSON.parse(payload.body);
 
@@ -142,8 +144,9 @@ function unsub() {
     //clear canvas
     context.clearRect(0, 0, canvas.width, canvas.height);
 
-    //enable input message
+    //enable input message and reset button
     messageInput.disabled = false;
+    resetButton.disabled = false;
 
     //clear timer
     timer1.innerText = "02:00";
@@ -201,6 +204,7 @@ function enterRoom(roomId) {
     scoreSubscription = stompClient.subscribe(`/topic/${roomId}/score`, onScore);
     timerSubscription = stompClient.subscribe(`/topic/${roomId}/timer`, onTimer);
     guessIdDisplaySubscription = stompClient.subscribe(`/topic/${roomId}/guessDisplay`, clearGuessDisplay);
+    resetCanvasSubscription = stompClient.subscribe(`/topic/${roomId}/resetCanvas`, onClearCanvas);
 
     stompClient.send(`${path}/addUser`, {}, JSON.stringify({sender: username, type: 'JOIN'}));
     stompClient.send(`${path}/score`);
@@ -244,6 +248,7 @@ function onEnd(payload) {
     inGame = false;
 }
 
+let resetButton = document.getElementById("resetButton");
 function onCanvas() {
     if (canvas.style['pointer-events'] === 'none'){
         canvas.style['pointer-events'] = "auto";
@@ -252,6 +257,7 @@ function onCanvas() {
     }
 
     messageInput.disabled = messageInput.disabled === false;
+    resetButton.disabled = resetButton.disabled === false;
 }
 
 function onChangeDrawUser(payload) {
@@ -265,6 +271,10 @@ function onChangeDrawUser(payload) {
 }
 
 function clearCanvas() {
+    stompClient.send(`${path}/resetCanvas`);
+}
+
+function onClearCanvas() {
     context.clearRect(0, 0, canvas.width, canvas.height);
 }
 

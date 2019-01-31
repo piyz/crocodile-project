@@ -151,4 +151,10 @@ public class WebSocketController {
         ChatMessage chatMessage = new ChatMessage();
         messagingTemplate.convertAndSend(String.format("/topic/%s/guessDisplay", roomId), chatMessage);
     }
+
+    @MessageMapping("/chat/{roomId}/resetCanvas")
+    public void resetCanvas(@DestinationVariable String roomId){
+        //create replacer for chatMessage, smth like actionMessage, notifyMessage
+        messagingTemplate.convertAndSend(String.format("/topic/%s/resetCanvas", roomId), new ChatMessage());
+    }
 }
