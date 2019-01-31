@@ -69,7 +69,7 @@ public class CrocoController {
             return "registration";
         }
         userService.save(user);
-        return "success";
+        return "redirect:/login";
     }
 
     @RequestMapping(value = "/dictionary", method = RequestMethod.GET)

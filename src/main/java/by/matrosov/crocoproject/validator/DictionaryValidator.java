@@ -22,8 +22,8 @@ public class DictionaryValidator implements Validator {
             errors.rejectValue("value", "Size.Dictionary.value");
         }
 
-        if (dictionary.getValue().trim().contains(" ")){
-            errors.rejectValue("value", "Whitespaces.Dictionary.value");
+        if (!dictionary.getValue().matches("^[а-я]+")){
+            errors.rejectValue("value", "Characters.Dictionary.value");
         }
     }
 }
