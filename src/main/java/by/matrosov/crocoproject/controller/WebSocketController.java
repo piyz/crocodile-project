@@ -2,6 +2,7 @@ package by.matrosov.crocoproject.controller;
 
 import by.matrosov.crocoproject.model.ChatMessage;
 import by.matrosov.crocoproject.model.DrawMessage;
+import by.matrosov.crocoproject.model.ScoreMessage;
 import by.matrosov.crocoproject.service.game.GameService;
 import by.matrosov.crocoproject.service.room.RoomService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Controller;
 
 import java.security.Principal;
+import java.util.Arrays;
 import java.util.Random;
 
 @Controller
@@ -61,7 +63,7 @@ public class WebSocketController {
             //add score
             if (gameService.addScore(prevUser, principal.getName(), roomId)){
                 //is end
-                chatMessage.setContent(gameService.getScore(roomId));
+                chatMessage.setContent(Arrays.toString(gameService.getScore(roomId))); //replace on score message
                 messagingTemplate.convertAndSend(String.format("/topic/%s/end", roomId), chatMessage);
 
                 //open room
@@ -139,9 +141,9 @@ public class WebSocketController {
 
     @MessageMapping("/chat/{roomId}/score")
     public void getScore(@DestinationVariable String roomId){
-        ChatMessage chatMessage = new ChatMessage();
-        chatMessage.setContent(gameService.getScore(roomId));
-        messagingTemplate.convertAndSend(String.format("/topic/%s/score", roomId), chatMessage);
+        ScoreMessage scoreMessage = new ScoreMessage();
+        scoreMessage.setUsersScore(gameService.getScore(roomId));
+        messagingTemplate.convertAndSend(String.format("/topic/%s/score", roomId), scoreMessage);
     }
 
     @MessageMapping("/chat/{roomId}/guessDisplay")

@@ -1,6 +1,7 @@
 package by.matrosov.crocoproject.listener;
 
 import by.matrosov.crocoproject.model.ChatMessage;
+import by.matrosov.crocoproject.model.ScoreMessage;
 import by.matrosov.crocoproject.service.game.GameService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -62,6 +63,9 @@ public class WebSocketEventListener {
             //remove from the map
             gameService.removeUser(username, roomId);
 
+            //update score
+            updateScore(roomId);
+
             //notify about left from the room
             roomLeft(username, roomId);
 
@@ -80,6 +84,9 @@ public class WebSocketEventListener {
             logger.info("User Disconnected: " + username);
             roomLeft(username, roomId);
             gameService.removeUser(username, roomId);
+
+            //update score
+            updateScore(roomId);
         }
     }
 
@@ -88,5 +95,11 @@ public class WebSocketEventListener {
         chatMessage.setType(ChatMessage.MessageType.LEAVE);
         chatMessage.setSender(username);
         messagingTemplate.convertAndSend(String.format("/topic/%s/public", roomId), chatMessage);
+    }
+
+    private void updateScore(String roomId){
+        ScoreMessage scoreMessage = new ScoreMessage();
+        scoreMessage.setUsersScore(gameService.getScore(roomId));
+        messagingTemplate.convertAndSend(String.format("/topic/%s/score", roomId), scoreMessage);
     }
 }

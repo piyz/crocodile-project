@@ -55,10 +55,14 @@ public class GameServiceImpl implements GameService{
     }
 
     @Override
-    public synchronized String getScore(String roomid) {
+    public synchronized String[] getScore(String roomid) {
         Map<String, Integer> innerMap = mapMap.get(roomid);
 
-        return Arrays.toString(innerMap.entrySet().toArray());
+        String score = Arrays.toString(innerMap.entrySet().toArray());
+
+        return score.substring(1, score.length() - 1)
+                .replace("=", " ")
+                .split(",");
     }
 
     @Override
