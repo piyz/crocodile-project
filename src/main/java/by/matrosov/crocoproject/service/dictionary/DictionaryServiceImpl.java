@@ -20,4 +20,9 @@ public class DictionaryServiceImpl implements DictionaryService{
     public long count() {
         return dictionaryRepository.count();
     }
+
+    @Override
+    public Dictionary findByValue(String value) {
+        return dictionaryRepository.findByValue(value);
+    }
 }

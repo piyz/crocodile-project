@@ -88,7 +88,7 @@ public class CrocoController {
     public String addDictionaryValue(@ModelAttribute("dictionary") Dictionary dictionary, BindingResult result){
         dictionaryValidator.validate(dictionary, result);
         if (result.hasErrors()){
-            return "dictionary/add";
+            return "dictionary";
         }
         dictionaryService.save(dictionary);
         return "redirect:/dictionary/add";

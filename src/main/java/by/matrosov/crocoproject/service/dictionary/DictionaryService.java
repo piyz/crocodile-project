@@ -7,4 +7,5 @@ import org.springframework.stereotype.Service;
 public interface DictionaryService {
     void save(Dictionary dictionary);
     long count();
+    Dictionary findByValue(String value);
 }
