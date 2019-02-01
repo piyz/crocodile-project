@@ -7,6 +7,7 @@ import by.matrosov.crocoproject.service.dictionary.DictionaryService;
 import by.matrosov.crocoproject.service.room.RoomService;
 import by.matrosov.crocoproject.service.user.UserService;
 import by.matrosov.crocoproject.validator.DictionaryValidator;
+import by.matrosov.crocoproject.validator.RoomValidator;
 import by.matrosov.crocoproject.validator.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -27,6 +28,9 @@ public class CrocoController {
 
     @Autowired
     private UserValidator userValidator;
+
+    @Autowired
+    private RoomValidator roomValidator;
 
     @Autowired
     private DictionaryValidator dictionaryValidator;
@@ -72,7 +76,7 @@ public class CrocoController {
         return "redirect:/login";
     }
 
-    @RequestMapping(value = "/dictionary", method = RequestMethod.GET)
+    @RequestMapping(value = "/dictionary/add", method = RequestMethod.GET)
     public String dictionaryForm(Model model){
         long count = dictionaryService.count();
         model.addAttribute("count", count);
@@ -80,7 +84,7 @@ public class CrocoController {
         return "dictionary";
     }
 
-    @RequestMapping(value = "/dictionary", method = RequestMethod.POST)
+    @RequestMapping(value = "/dictionary/add", method = RequestMethod.POST)
     public String addDictionaryValue(@ModelAttribute("dictionary") Dictionary dictionary, BindingResult result){
         dictionaryValidator.validate(dictionary, result);
         if (result.hasErrors()){
@@ -88,5 +92,21 @@ public class CrocoController {
         }
         dictionaryService.save(dictionary);
         return "redirect:/dictionary";
+    }
+
+    @RequestMapping(value = "/room/add", method = RequestMethod.GET)
+    public String roomForm(Model model){
+        model.addAttribute("room", new Room());
+        return "room";
+    }
+
+    @RequestMapping(value = "/room/add", method = RequestMethod.POST)
+    public String addRoom(@ModelAttribute("room") Room room, BindingResult result){
+        roomValidator.validate(room, result);
+        if (result.hasErrors()){
+            return "room";
+        }
+        roomService.save(room);
+        return "redirect:/index";
     }
 }

@@ -30,4 +30,10 @@ public class RoomServiceImpl implements RoomService {
 
         roomRepository.save(room2update);
     }
+
+    @Override
+    public void save(Room room) {
+        room.setOpen(true);
+        roomRepository.save(room);
+    }
 }

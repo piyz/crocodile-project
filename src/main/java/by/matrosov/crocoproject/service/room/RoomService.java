@@ -9,4 +9,5 @@ import java.util.List;
 public interface RoomService {
     List<Room> getAll();
     void changeRoomState(long roomid);
+    void save(Room room);
 }
