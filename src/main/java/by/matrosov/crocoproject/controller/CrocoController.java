@@ -88,10 +88,10 @@ public class CrocoController {
     public String addDictionaryValue(@ModelAttribute("dictionary") Dictionary dictionary, BindingResult result){
         dictionaryValidator.validate(dictionary, result);
         if (result.hasErrors()){
-            return "dictionary";
+            return "dictionary/add";
         }
         dictionaryService.save(dictionary);
-        return "redirect:/dictionary";
+        return "redirect:/dictionary/add";
     }
 
     @RequestMapping(value = "/room/add", method = RequestMethod.GET)
