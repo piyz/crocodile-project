@@ -18,8 +18,8 @@
             <a class="navbar-brand" href="#">Crococo</a>
         </div>
 
-        <div id="unsub" class="hidden">
-            <button type="button" onclick="unsub()" class="btn btn-primary btn-arrow-left">To rooms</button>
+        <div id="unsubscribe" class="hidden">
+            <button type="button" onclick="unsubscribe()" class="btn btn-primary btn-arrow-left">To rooms</button>
         </div>
 
         <ul class="nav navbar-nav navbar-right">
@@ -36,7 +36,7 @@
         <div class="modal-dialog modal-sm">
             <div class="modal-content">
                 <div class="modal-body">
-                    <span id="time">00:05</span>
+                    <span id="timer2">00:05</span>
                     <table>
                         <tr>
                             <td><button type="button" class="btn btn-primary btn-lg" id="guess-button-id-1"></button></td>
@@ -74,7 +74,7 @@
                 <!--<td th:if="${room.password.isEmpty()}">NO</td>
                 <td th:if="${!room.password.isEmpty()}">YES</td>-->
                 <td>
-                    <button class="btn btn-outline-dark" type="button" th:value="${room.roomId}" onclick="connecting(this)">Join</button>
+                    <button class="btn btn-outline-dark" type="button" th:value="${room.roomId}" onclick="join2room(this)">Join</button>
                     <button class="btn btn-outline-dark" type="button" th:value="${room.roomId}">Rename</button>
                 </td>
             </tr>
@@ -105,7 +105,7 @@
                 <h2 class="hidden">Guess [<span id="guess-id-display"></span>]</h2>
                 <h4 id="guess-window-id" class="hidden"></h4>
                 <h4 id="guess-window-open-id"></h4>
-                <span id="timer">02:00</span>
+                <span id="timer1">02:00</span>
             </div>
             <div class="connecting">
                 Connecting...
@@ -133,5 +133,9 @@
 
 </div>
 <script th:src="@{/js/main.js}"></script>
+<script th:src="@{/js/canvas.js}"></script>
+<script th:src="@{/js/connection.js}"></script>
+<script th:src="@{/js/room.js}"></script>
+<script th:src="@{/js/avatar.js}"></script>
 </body>
 </html>
