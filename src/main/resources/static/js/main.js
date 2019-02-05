@@ -41,7 +41,6 @@ let changeGuessSubscription;
 let changeDrawUserSubscription;
 let endSubscription;
 let drawSubscription;
-let modalWindowSubscription;
 let scoreSubscription;
 let timerSubscription;
 let guessIdDisplaySubscription;
@@ -56,9 +55,9 @@ function unsubscribe() {
     scoreSubscription.unsubscribe();
     timerSubscription.unsubscribe();
     guessIdDisplaySubscription.unsubscribe();
+    resetCanvasSubscription.unsubscribe();
 
     canvasForm.classList.add('hidden');
-    //canvas.classList.add('hidden');
     unsubButton.classList.add('hidden');
     tableForm.classList.remove('hidden');
     chatPage.classList.add('hidden');
@@ -75,7 +74,7 @@ function unsubscribe() {
 
     //enable input message and reset button
     messageInput.disabled = false;
-    resetButton.disabled = false;
+    resetButton.disabled = true;
 
     //clear timer
     timer1.innerText = "02:00";
@@ -86,8 +85,12 @@ function unsubscribe() {
     guess.innerHTML = "";
 
     inGame = false;
+    drawUser = null;
 
     clearInterval(gameInterval);
+
+    //TODO disable canvas
+    canvas.style['pointer-events'] = 'none';
 }
 
 function clearCanvas() {
@@ -120,7 +123,7 @@ function sendMessage(event) {
             }
 
             //reset timer
-            stompClient.send(`${path}/timer`, {});
+            stompClient.send(`${path}/timer`);
 
             stompClient.send(`${path}/changeDrawUser`, {}, JSON.stringify({
                 sender: username + "#" + answer,
@@ -140,6 +143,17 @@ function sendMessage(event) {
 }
 
 messageForm.addEventListener('submit', sendMessage, true);
+unsubButton.addEventListener("click", unsubscribe);
+resetButton.addEventListener("click", clearCanvas);
 
 //disable back button in browser
 window.onbeforeunload = function() { return "Your work will be lost."; };
+
+/*
+window.console.log = function(){
+    //console.error('Sorry , developers tools are blocked here....');
+    window.console.log = function() {
+        return false;
+    }
+};
+ */

@@ -20,7 +20,7 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     public void changeRoomState(long roomid) {
-        Room room2update = roomRepository.getRoomByRoomId(roomid);
+        Room room2update = roomRepository.findRoomByRoomId(roomid);
 
         if (room2update.isOpen()){
             room2update.setOpen(false);
@@ -35,5 +35,17 @@ public class RoomServiceImpl implements RoomService {
     public void save(Room room) {
         room.setOpen(true);
         roomRepository.save(room);
+    }
+
+    @Override
+    public void update(Room room, long roomid) {
+        Room roomExist = roomRepository.findRoomByRoomId(roomid);
+        roomExist.setRoomName(room.getRoomName());
+        roomRepository.save(roomExist);
+    }
+
+    @Override
+    public Room getRoomById(long roomid) {
+        return roomRepository.findRoomByRoomId(roomid);
     }
 }

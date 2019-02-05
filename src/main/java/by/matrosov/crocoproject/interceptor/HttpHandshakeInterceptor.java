@@ -22,7 +22,9 @@ public class HttpHandshakeInterceptor implements HandshakeInterceptor {
         if (serverHttpRequest instanceof ServletServerHttpRequest) {
             ServletServerHttpRequest servletRequest = (ServletServerHttpRequest) serverHttpRequest;
             HttpSession session = servletRequest.getServletRequest().getSession();
+            String username = servletRequest.getServletRequest().getUserPrincipal().getName();
             map.put("sessionId", session.getId());
+            map.put("username", username);
         }
         return true;
     }

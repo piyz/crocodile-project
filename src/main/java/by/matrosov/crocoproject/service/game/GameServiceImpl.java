@@ -30,12 +30,9 @@ public class GameServiceImpl implements GameService{
     }
 
     @Override
-    public synchronized void removeUser(String username, String roomid) {
+    public synchronized void removeUser(String username, String roomid) throws NullPointerException{
         Map<String, Integer> innerMap = mapMap.get(roomid);
-
-        try{
-            innerMap.remove(username);
-        }catch (NullPointerException ignored){}
+        innerMap.remove(username);
     }
 
     @Override

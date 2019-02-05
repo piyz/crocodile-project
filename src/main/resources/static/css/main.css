@@ -293,3 +293,23 @@ button.accent {
     left: 55%;
     margin-top: -59%;
 }
+
+#red{
+    border-radius: 50%;
+}
+
+#green{
+    border-radius: 50%;
+}
+
+#blue{
+    border-radius: 50%;
+}
+
+#yellow{
+    border-radius: 50%;
+}
+
+#black{
+    border-radius: 50%;
+}

@@ -16,6 +16,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.security.Principal;
 import java.util.List;
@@ -95,18 +96,35 @@ public class CrocoController {
     }
 
     @RequestMapping(value = "/room/add", method = RequestMethod.GET)
-    public String roomForm(Model model){
+    public String roomAddForm(Model model){
         model.addAttribute("room", new Room());
-        return "room";
+        return "room-add";
     }
 
     @RequestMapping(value = "/room/add", method = RequestMethod.POST)
     public String addRoom(@ModelAttribute("room") Room room, BindingResult result){
         roomValidator.validate(room, result);
         if (result.hasErrors()){
-            return "room";
+            return "room-add";
         }
         roomService.save(room);
+        return "redirect:/index";
+    }
+
+    @RequestMapping(value = "/room/edit", method = RequestMethod.GET)
+    public String roomEditForm(@RequestParam(name = "roomId") long roomId, Model model){
+        Room room = roomService.getRoomById(roomId);
+        model.addAttribute("room", room);
+        return "room-edit";
+    }
+
+    @RequestMapping(value = "/room/edit", method = RequestMethod.POST)
+    public String updateRoom(@RequestParam(name = "roomId") long roomId, Room room, BindingResult result){
+        roomValidator.validate(room, result);
+        if (result.hasErrors()){
+            return "room-edit";
+        }
+        roomService.update(room, roomId);
         return "redirect:/index";
     }
 }

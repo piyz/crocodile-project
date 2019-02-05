@@ -10,4 +10,6 @@ public interface RoomService {
     List<Room> getAll();
     void changeRoomState(long roomid);
     void save(Room room);
+    void update(Room room, long roomid);
+    Room getRoomById(long roomid);
 }

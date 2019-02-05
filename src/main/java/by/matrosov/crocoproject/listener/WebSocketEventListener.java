@@ -83,8 +83,13 @@ public class WebSocketEventListener {
         if (username != null) {
             logger.info("User Disconnected: " + username);
             roomLeft(username, roomId);
-            gameService.removeUser(username, roomId);
 
+            try{
+                gameService.removeUser(username, roomId);
+            }catch (NullPointerException ignored){}
+
+            //TODO if current room is not empty -> update score
+            //else NPE
             //update score
             updateScore(roomId);
         }
