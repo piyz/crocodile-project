@@ -12,7 +12,7 @@ import java.util.*;
 @Service
 public class GameServiceImpl implements GameService{
     private static Map<String, Map<String, Integer>> mapMap = Collections.synchronizedMap(new HashMap<>());
-    private static final int FINAL_SCORE = 15;
+    private static final int FINAL_SCORE = 100;
 
     //replace on service
     @Autowired
