@@ -111,7 +111,7 @@ function sendMessage(event) {
             let answer = chatMessage.content;
 
             //clear guessdidsplay
-            stompClient.send(`${path}/guessDisplay`, {});
+            stompClient.send(`${path}/guessDisplay`);
 
             //reset color to def
             context.strokeStyle = "#000000";
@@ -148,12 +148,9 @@ resetButton.addEventListener("click", clearCanvas);
 
 //disable back button in browser
 window.onbeforeunload = function() { return "Your work will be lost."; };
-
-/*
 window.console.log = function(){
     //console.error('Sorry , developers tools are blocked here....');
     window.console.log = function() {
         return false;
     }
 };
- */

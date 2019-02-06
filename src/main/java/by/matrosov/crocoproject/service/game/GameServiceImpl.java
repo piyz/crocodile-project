@@ -1,7 +1,9 @@
 package by.matrosov.crocoproject.service.game;
 
 import by.matrosov.crocoproject.model.Dictionary;
+import by.matrosov.crocoproject.model.Room;
 import by.matrosov.crocoproject.repository.DictionaryRepository;
+import by.matrosov.crocoproject.service.room.RoomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,11 +12,14 @@ import java.util.*;
 @Service
 public class GameServiceImpl implements GameService{
     private static Map<String, Map<String, Integer>> mapMap = Collections.synchronizedMap(new HashMap<>());
-    private static final int FINAL_SCORE = 100;
+    private static final int FINAL_SCORE = 15;
 
     //replace on service
     @Autowired
     private DictionaryRepository dictionaryRepository;
+
+    @Autowired
+    private RoomService roomService;
 
     @Override
     public synchronized void addUser(String username, String roomid) {
@@ -32,6 +37,8 @@ public class GameServiceImpl implements GameService{
     @Override
     public synchronized void removeUser(String username, String roomid) throws NullPointerException{
         Map<String, Integer> innerMap = mapMap.get(roomid);
+
+        //TODO if last user -> remove room from map
         innerMap.remove(username);
     }
 
@@ -52,7 +59,7 @@ public class GameServiceImpl implements GameService{
     }
 
     @Override
-    public synchronized String[] getScore(String roomid) {
+    public synchronized String[] getScore(String roomid) throws NullPointerException{
         Map<String, Integer> innerMap = mapMap.get(roomid);
 
         String score = Arrays.toString(innerMap.entrySet().toArray());

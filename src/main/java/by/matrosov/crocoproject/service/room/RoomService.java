@@ -11,5 +11,6 @@ public interface RoomService {
     void changeRoomState(long roomid);
     void save(Room room);
     void update(Room room, long roomid);
+    void delete(long roomid);
     Room getRoomById(long roomid);
 }

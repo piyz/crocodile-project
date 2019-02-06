@@ -53,9 +53,21 @@
         </div>
     </div>
 
-    <div id="endModal" class="modal">
-        <div id="modal-cont" class="modal-content">
-            <!--<span class="close">&times;</span>-->
+    <!-- End Modal -->
+    <div class="modal fade" id="endModal" role="dialog">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="text-center">
+                    <form class="form-signin">
+
+                        <div class="form-group" id="modal-cont">
+                            <h1 class="h3 mb-3 font-weight-normal">GG</h1>
+                        </div>
+
+                        <a class="btn btn-primary" th:href="@{/index}">Go Home</a>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -88,47 +100,53 @@
     </div>
 
     <div id="canvas-form" class="hidden">
-        <canvas id="drawing" width="600" height="600" style="pointer-events: none; border: 1px solid black" ></canvas>
 
-        <button id="resetButton" class="btn btn-light" disabled>Clear</button>
-        <button id="red" type="submit" class="btn btn-outline-danger">R</button>
-        <button id="green" type="submit" class="btn btn-outline-success">G</button>
-        <button id="blue" type="submit" class="btn btn-outline-primary" >B</button>
-        <button id="yellow" type="submit" class="btn btn-outline-warning" >Y</button>
-        <button id="black" type="submit" class="btn btn-outline-dark">B</button>
-    </div>
+        <div id="guess">
+            <h4 id="guess-window-id" class="hidden"></h4>
+            <h4 id="guess-window-open-id"></h4>
+        </div>
 
-    <div id="chat-page" class="hidden">
-        <div class="chat-container">
-            <div class="chat-header">
-                <h2>Chatroom [<span id="room-id-display"></span>]</h2>
-                <h2 class="hidden">Guess [<span id="guess-id-display"></span>]</h2>
-                <h4 id="guess-window-id" class="hidden"></h4>
-                <h4 id="guess-window-open-id"></h4>
-                <span id="timer1">02:00</span>
+        <div id="draw">
+            <canvas id="drawing" th:width="600" th:height="600" style="pointer-events: none; border: 1px solid black" ></canvas>
+            <div id="canvas-buttons">
+                <button id="resetButton" class="btn btn-light" disabled>Clear</button>
+                <button id="red" type="submit" class="btn btn-outline-danger">R</button>
+                <button id="green" type="submit" class="btn btn-outline-success">G</button>
+                <button id="blue" type="submit" class="btn btn-outline-primary" >B</button>
+                <button id="yellow" type="submit" class="btn btn-outline-warning" >Y</button>
+                <button id="black" type="submit" class="btn btn-outline-dark">B</button>
             </div>
-            <div class="connecting">
-                Connecting...
+        </div>
+
+        <div id="chat-page" class="hidden">
+            <div class="chat-container">
+                <div class="chat-header">
+                    <h2>Chatroom [<span id="room-id-display"></span>]</h2>
+                    <h2 class="hidden">Guess [<span id="guess-id-display"></span>]</h2>
+                    <span id="timer1">02:00</span>
+                </div>
+                <div class="connecting">
+                    Connecting...
+                </div>
+                <ul id="messageArea">
+
+                </ul>
+                <form id="messageForm" name="messageForm" nameForm="messageForm">
+                    <div class="form-group">
+                        <div class="input-group clearfix">
+                            <input type="text" id="message" autocomplete="off" class="form-control"/>
+                            <button type="submit" class="primary">Send</button>
+                        </div>
+                    </div>
+                </form>
             </div>
-            <ul id="messageArea">
+        </div>
+
+        <div id="currentUsers" class="container">
+            <ul id="userlist" class="hidden">
 
             </ul>
-            <form id="messageForm" name="messageForm" nameForm="messageForm">
-                <div class="form-group">
-                    <div class="input-group clearfix">
-                        <input type="text" id="message" autocomplete="off" class="form-control"/>
-                        <button type="submit" class="primary">Send</button>
-                    </div>
-                </div>
-            </form>
         </div>
-        <p>type «test» to start</p>
-    </div>
-
-    <div id="currentUsers" class="container">
-        <ul id="userlist" class="hidden">
-
-        </ul>
     </div>
 
 </div>

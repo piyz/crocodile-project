@@ -86,12 +86,8 @@ public class WebSocketEventListener {
 
             try{
                 gameService.removeUser(username, roomId);
+                updateScore(roomId);
             }catch (NullPointerException ignored){}
-
-            //TODO if current room is not empty -> update score
-            //else NPE
-            //update score
-            updateScore(roomId);
         }
     }
 
@@ -102,7 +98,7 @@ public class WebSocketEventListener {
         messagingTemplate.convertAndSend(String.format("/topic/%s/public", roomId), chatMessage);
     }
 
-    private void updateScore(String roomId){
+    private void updateScore(String roomId) throws NullPointerException{
         ScoreMessage scoreMessage = new ScoreMessage();
         scoreMessage.setUsersScore(gameService.getScore(roomId));
         messagingTemplate.convertAndSend(String.format("/topic/%s/score", roomId), scoreMessage);

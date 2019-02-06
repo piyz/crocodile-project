@@ -30,6 +30,7 @@ public class WebSocketController {
 
     @MessageMapping("/chat/{roomId}/timer")
     public void updateTimer(@DestinationVariable String roomId) {
+        //TODO empty message instead of chat message
         messagingTemplate.convertAndSend(String.format("/topic/%s/timer", roomId), new ChatMessage());
     }
 
@@ -67,8 +68,11 @@ public class WebSocketController {
                 messagingTemplate.convertAndSend(String.format("/topic/%s/end", roomId), chatMessage);
 
                 //open room
-                roomService.changeRoomState(Integer.parseInt(roomId));
-                messagingTemplate.convertAndSend("/topic/table", chatMessage);
+                //roomService.changeRoomState(Integer.parseInt(roomId));
+                //messagingTemplate.convertAndSend("/topic/table", chatMessage);
+
+                //delete room
+                roomService.delete(Integer.parseInt(roomId));
             }else {
                 //set prev user to disable canvas
                 messagingTemplate.convertAndSendToUser(prevUser, "/queue/canvas", chatMessage);
@@ -90,6 +94,34 @@ public class WebSocketController {
         //set current user to enable canvas
         messagingTemplate.convertAndSendToUser(name, "/queue/canvas", chatMessage);
     }
+
+    @MessageMapping("/chat/{roomId}/timeOver")
+    public void timeOver(@DestinationVariable String roomId, @Payload ChatMessage chatMessage, Principal principal){
+
+        //get prev user
+        String prevUser = chatMessage.getContent();
+
+        //next user
+        String name;
+
+        //set prev user to disable canvas
+        messagingTemplate.convertAndSendToUser(prevUser, "/queue/canvas", chatMessage);
+        name = gameService.getNextUser(prevUser, roomId);
+        gameService.print();
+
+        //send modal window
+        chatMessage.setContent(gameService.getRandomWords());
+        messagingTemplate.convertAndSendToUser(name, "/queue/sendModal", chatMessage);
+
+        // set current user to DRAWING
+        chatMessage.setSender(name);
+        messagingTemplate.convertAndSend(String.format("/topic/%s/changeDrawUser", roomId), chatMessage);
+
+        //set current user to enable canvas
+        messagingTemplate.convertAndSendToUser(name, "/queue/canvas", chatMessage);
+    }
+
+
 
     @MessageMapping("/chat/{roomId}/addUser")
     public void addUser(@DestinationVariable String roomId, @Payload ChatMessage chatMessage, SimpMessageHeaderAccessor headerAccessor) {
@@ -148,8 +180,8 @@ public class WebSocketController {
 
     @MessageMapping("/chat/{roomId}/guessDisplay")
     public void clearGuessDisplay(@DestinationVariable String roomId){
-        ChatMessage chatMessage = new ChatMessage();
-        messagingTemplate.convertAndSend(String.format("/topic/%s/guessDisplay", roomId), chatMessage);
+        //TODO empty message instead of chat message
+        messagingTemplate.convertAndSend(String.format("/topic/%s/guessDisplay", roomId), new ChatMessage());
     }
 
     @MessageMapping("/chat/{roomId}/resetCanvas")

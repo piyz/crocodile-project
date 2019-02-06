@@ -78,10 +78,9 @@ function onChangeGuess(payload) {
 
             timer--;
             if (timer < 0) {
+                //time is over
                 clearInterval(gameInterval);
-                timer1.innerText = "02:00";
-                //TODO impl time is over case
-                //stompClient.send(`${path}/timeOver`, {}, JSON.stringify({sender: username, content : drawUser, type: 'OVER'}));
+                changeGameState();
             } else if (timer < 90 && count === 0){
                 //open first letter
                 guessOpened.childNodes[randoms[count]].textContent = " " + word.charAt(randoms[count]) + " ";
@@ -99,6 +98,22 @@ function onChangeGuess(payload) {
     }
 }
 
+function changeGameState(){
+
+    //clear guess display
+    stompClient.send(`${path}/guessDisplay`);
+
+    //TODO reset color
+
+    //reset timer
+    stompClient.send(`${path}/timer`);
+
+    stompClient.send(`${path}/timeOver`, {}, JSON.stringify({
+        content : drawUser,
+        type: 'GUESS'
+    }));
+}
+
 function onMessageReceived(payload) {
     let message = JSON.parse(payload.body);
 
@@ -111,8 +126,13 @@ function onMessageReceived(payload) {
         messageElement.classList.add('event-message');
         message.content = message.sender + ' left!';
     } else if (message.type === "GUESS") {
-        messageElement.classList.add('event-message');
-        message.content = message.sender.split("#")[0] + ' отгадал ' + message.sender.split("#")[1].toUpperCase();
+        if (message.sender.split("#")[1] === "test") {
+            messageElement.classList.add('event-message');
+            message.content = message.sender.split("#")[0] + ' запустил игру';
+        }else {
+            messageElement.classList.add('event-message');
+            message.content = message.sender.split("#")[0] + ' написал ' + message.sender.split("#")[1].toUpperCase();
+        }
     } else {
         messageElement.classList.add('chat-message');
 
@@ -150,8 +170,13 @@ function onChangeDrawUser(payload) {
 function onEnd(payload) {
     let message = JSON.parse(payload.body);
 
-    //result text
-    modalContent.appendChild(document.createElement('td').appendChild(document.createTextNode(message.content)));
+    //TODO remove first and last char
+    let score = message.content.split(",");
+    for (let i = 0; i < score.length; i++) {
+        modalContent.appendChild(document.createElement('h1').appendChild(document.createTextNode(score[i])));
+    }
+
+    $('#endModal').modal({backdrop: 'static', keyboard: false});
 
     guessIdDisplay.textContent = '';
     endModal.style.display = "block";
@@ -176,7 +201,7 @@ function onScore(payload) {
     let users = message.usersScore;
     for (let i = 0; i < users.length; i++) {
         let messageElement = document.createElement('li');
-        messageElement.classList.add();
+        //messageElement.classList.add();
         let usernameElement = document.createElement('span');
         let usernameText = document.createTextNode(users[i]);
         usernameElement.appendChild(usernameText);
