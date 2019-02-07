@@ -1,7 +1,7 @@
 package by.matrosov.crocoproject.listener;
 
-import by.matrosov.crocoproject.model.ChatMessage;
-import by.matrosov.crocoproject.model.ScoreMessage;
+import by.matrosov.crocoproject.model.message.ChatMessage;
+import by.matrosov.crocoproject.model.message.ScoreMessage;
 import by.matrosov.crocoproject.service.game.GameService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -1,4 +1,4 @@
-package by.matrosov.crocoproject.model;
+package by.matrosov.crocoproject.model.message;
 
 public class ChatMessage {
     private MessageType type;

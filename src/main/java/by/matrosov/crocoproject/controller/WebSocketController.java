@@ -1,8 +1,8 @@
 package by.matrosov.crocoproject.controller;
 
-import by.matrosov.crocoproject.model.ChatMessage;
-import by.matrosov.crocoproject.model.DrawMessage;
-import by.matrosov.crocoproject.model.ScoreMessage;
+import by.matrosov.crocoproject.model.message.ChatMessage;
+import by.matrosov.crocoproject.model.message.DrawMessage;
+import by.matrosov.crocoproject.model.message.ScoreMessage;
 import by.matrosov.crocoproject.service.game.GameService;
 import by.matrosov.crocoproject.service.room.RoomService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +30,6 @@ public class WebSocketController {
 
     @MessageMapping("/chat/{roomId}/timer")
     public void updateTimer(@DestinationVariable String roomId) {
-        //TODO empty message instead of chat message
         messagingTemplate.convertAndSend(String.format("/topic/%s/timer", roomId), new ChatMessage());
     }
 
@@ -72,7 +71,7 @@ public class WebSocketController {
                 //messagingTemplate.convertAndSend("/topic/table", chatMessage);
 
                 //delete room
-                roomService.delete(Integer.parseInt(roomId));
+                roomService.delete(Long.parseLong(roomId));
             }else {
                 //set prev user to disable canvas
                 messagingTemplate.convertAndSendToUser(prevUser, "/queue/canvas", chatMessage);
@@ -120,8 +119,6 @@ public class WebSocketController {
         //set current user to enable canvas
         messagingTemplate.convertAndSendToUser(name, "/queue/canvas", chatMessage);
     }
-
-
 
     @MessageMapping("/chat/{roomId}/addUser")
     public void addUser(@DestinationVariable String roomId, @Payload ChatMessage chatMessage, SimpMessageHeaderAccessor headerAccessor) {
@@ -180,13 +177,11 @@ public class WebSocketController {
 
     @MessageMapping("/chat/{roomId}/guessDisplay")
     public void clearGuessDisplay(@DestinationVariable String roomId){
-        //TODO empty message instead of chat message
         messagingTemplate.convertAndSend(String.format("/topic/%s/guessDisplay", roomId), new ChatMessage());
     }
 
     @MessageMapping("/chat/{roomId}/resetCanvas")
     public void resetCanvas(@DestinationVariable String roomId){
-        //create replacer for chatMessage, smth like actionMessage, notifyMessage
         messagingTemplate.convertAndSend(String.format("/topic/%s/resetCanvas", roomId), new ChatMessage());
     }
 }

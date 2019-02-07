@@ -77,7 +77,7 @@ function onModalWindow(payload) {
                 clearInterval(interval);
                 timer2.innerText = "00:05";
 
-                let random = Math.floor(Math.random() * 4);
+                let random = Math.floor(Math.random() * 3);
                 stompClient.send(`${path}/changeGuess`, {}, JSON.stringify({content : message.content.split(",")[random]}));
 
                 $('#myModal').modal('hide');

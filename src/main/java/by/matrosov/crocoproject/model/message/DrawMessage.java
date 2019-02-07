@@ -1,4 +1,4 @@
-package by.matrosov.crocoproject.model;
+package by.matrosov.crocoproject.model.message;
 
 public class DrawMessage {
     private String sender;

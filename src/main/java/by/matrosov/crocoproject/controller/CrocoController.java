@@ -56,7 +56,7 @@ public class CrocoController {
 
     @RequestMapping(value = "/index", method = RequestMethod.GET)
     public String index(Model model, Principal principal){
-        String username = principal.getName();
+        String username = principal.getName(); //NPE here?
         if (username == null || username.isEmpty()){
             return "redirect:/login";
         }

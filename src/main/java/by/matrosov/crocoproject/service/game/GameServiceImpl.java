@@ -35,8 +35,12 @@ public class GameServiceImpl implements GameService{
     public synchronized void removeUser(String username, String roomid) throws NullPointerException{
         Map<String, Integer> innerMap = mapMap.get(roomid);
 
-        //TODO if last user -> remove room from map
-        innerMap.remove(username);
+        //if last user -> remove room from mapMap
+        if (innerMap.size() == 1){
+            mapMap.remove(roomid);
+        }else {
+            innerMap.remove(username);
+        }
     }
 
     @Override
