@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.HttpSession;
 import java.security.Principal;
 import java.util.List;
 
@@ -42,7 +43,13 @@ public class CrocoController {
     @Autowired
     private DictionaryService dictionaryService;
 
-    @RequestMapping(value = {"/login", "/", "/logout"}, method = RequestMethod.GET)
+    @RequestMapping(value = "/logout", method=RequestMethod.GET)
+    public String logout(HttpSession session) {
+        session.invalidate();
+        return "redirect:/login";
+    }
+
+    @RequestMapping(value = {"/login", "/"}, method = RequestMethod.GET)
     public String loginPage(){
         return "login";
     }

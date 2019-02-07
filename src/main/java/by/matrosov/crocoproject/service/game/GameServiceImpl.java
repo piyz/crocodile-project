@@ -18,9 +18,6 @@ public class GameServiceImpl implements GameService{
     @Autowired
     private DictionaryRepository dictionaryRepository;
 
-    @Autowired
-    private RoomService roomService;
-
     @Override
     public synchronized void addUser(String username, String roomid) {
         Map<String, Integer> innerMap = mapMap.get(roomid);
