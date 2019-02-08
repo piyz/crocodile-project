@@ -12,144 +12,185 @@
 </head>
 <body>
 
-<nav class="navbar navbar-inverse">
-    <div class="container-fluid">
-        <div class="navbar-header">
-            <a class="navbar-brand" href="#">Crococo</a>
-        </div>
-
-        <div id="unsubscribe" class="hidden">
-            <button type="button" class="btn btn-primary btn-arrow-left">To rooms</button>
-        </div>
-
-        <ul class="nav navbar-nav navbar-right">
-            <li><a href="#"><span id="username" th:utext="${username}"></span></a></li>
-            <li><a th:href="@{/logout}">Logout</a></li>
-        </ul>
-    </div>
-</nav>
-
 <div class="container">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light rounded">
+        <a class="navbar-brand" href="#">Crococo</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample09" aria-controls="navbarsExample09" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
 
-    <!-- Modal -->
-    <div class="modal fade" id="myModal" role="dialog">
-        <div class="modal-dialog modal-sm">
-            <div class="modal-content">
-                <div class="modal-body">
-                    <span id="timer2">00:05</span>
-                    <table>
-                        <tr>
-                            <td><button type="button" class="btn btn-primary btn-lg" id="guess-button-id-1"></button></td>
-                        </tr>
-                        <tr>
-                            <td><button type="button" class="btn btn-primary btn-lg" id="guess-button-id-2"></button></td>
-                        </tr>
-                        <tr>
-                            <td><button type="button" class="btn btn-primary btn-lg" id="guess-button-id-3"></button></td>
-                        </tr>
-                    </table>
+        <div class="collapse navbar-collapse" id="navbarsExample09">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Link</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link disabled" href="#">Disabled</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="https://example.com" id="dropdown09" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown</a>
+                    <div class="dropdown-menu" aria-labelledby="dropdown09">
+                        <a class="dropdown-item" href="#">Action</a>
+                        <a class="dropdown-item" href="#">Another action</a>
+                        <a class="dropdown-item" href="#">Something else here</a>
+                    </div>
+                </li>
+            </ul>
+
+            <div id="unsubscribe" class="hidden">
+                <button type="button" class="btn btn-primary btn-arrow-left">Room menu</button>
+            </div>
+
+            <form class="form-inline my-2 my-md-0">
+                <input class="form-control" type="text" placeholder="Search" aria-label="Search">
+            </form>
+
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a class="nav-link" href="#">Link</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="https://example.com" id="dropdown10" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span id="username" th:utext="${username}"></span></a>
+                    <div class="dropdown-menu" aria-labelledby="dropdown09">
+                        <a class="dropdown-item" href="#">Action</a>
+                        <a class="dropdown-item" href="#">Another action</a>
+                        <a class="dropdown-item" href="#">Something else here</a>
+                        <a class="dropdown-item" th:href="@{/logout}">Logout</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div style="background:transparent !important" class="jumbotron">
+
+        <!-- Modal -->
+        <div class="modal fade" id="myModal" role="dialog">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <span id="timer2">00:05</span>
+                        <table>
+                            <tr>
+                                <td><button type="button" class="btn btn-primary btn-lg" id="guess-button-id-1"></button></td>
+                            </tr>
+                            <tr>
+                                <td><button type="button" class="btn btn-primary btn-lg" id="guess-button-id-2"></button></td>
+                            </tr>
+                            <tr>
+                                <td><button type="button" class="btn btn-primary btn-lg" id="guess-button-id-3"></button></td>
+                            </tr>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- End Modal -->
-    <div class="modal fade" id="endModal" role="dialog">
-        <div class="modal-dialog modal-sm">
-            <div class="modal-content">
-                <div class="text-center">
-                    <form class="form-signin">
+        <!-- End Modal -->
+        <div class="modal fade" id="endModal" role="dialog">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content">
+                    <div class="text-center">
+                        <form class="form-signin">
 
-                        <div class="form-group" id="modal-cont">
-                            <h1 class="h3 mb-3 font-weight-normal">GG</h1>
+                            <div class="form-group" id="modal-cont">
+                                <h1 class="h3 mb-3 font-weight-normal">GG</h1>
+                            </div>
+
+                            <a class="btn btn-primary" th:href="@{/index}">Go Home</a>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="table" th:if="${not #lists.isEmpty(listRooms)}">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>RoomId</th>
+                    <th>RoomName</th>
+                    <th>Password</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tr th:each="room : ${listRooms}" th:if="${room.isOpen()}">
+                    <td th:text="${room.roomId}" id="roomId"></td>
+                    <td th:text="${room.roomName}"></td>
+                    <td>NO</td>
+                    <!--<td th:if="${room.password.isEmpty()}">NO</td>
+                    <td th:if="${!room.password.isEmpty()}">YES</td>-->
+                    <td>
+                        <button class="btn btn-outline-dark" type="button" th:value="${room.roomId}" onclick="join2room(this)">Join</button>
+                        <a class="btn btn-outline-dark" th:href="@{/room/edit(roomId=${room.roomId})}">Rename</a>
+                    </td>
+                </tr>
+            </table>
+            <div class="container">
+                <a th:href="@{/dictionary/add}">Добавить слова</a>
+            </div>
+            <div class="container">
+                <a th:href="@{/room/add}">Добавить комнату</a>
+            </div>
+        </div>
+
+        <div id="canvas-form" class="hidden">
+
+            <div id="guess">
+                <h4 id="guess-window-id" class="hidden"></h4>
+                <h4 id="guess-window-open-id"></h4>
+            </div>
+
+            <div id="draw">
+                <canvas id="drawing" th:width="600" th:height="600" style="pointer-events: none; border: 1px solid black" ></canvas>
+                <div id="canvas-buttons">
+                    <button id="resetButton" class="btn btn-light" disabled>Clear</button>
+                    <button id="red" type="submit" class="btn btn-outline-danger">R</button>
+                    <button id="green" type="submit" class="btn btn-outline-success">G</button>
+                    <button id="blue" type="submit" class="btn btn-outline-primary" >B</button>
+                    <button id="yellow" type="submit" class="btn btn-outline-warning" >Y</button>
+                    <button id="black" type="submit" class="btn btn-outline-dark">B</button>
+                </div>
+            </div>
+
+            <div id="chat-page" class="hidden">
+                <div class="chat-container">
+                    <div class="chat-header">
+                        <h2>Chatroom [<span id="room-id-display"></span>]</h2>
+                        <h2 class="hidden">Guess [<span id="guess-id-display"></span>]</h2>
+                        <span id="timer1">02:00</span>
+                    </div>
+                    <div class="connecting">
+                        Connecting...
+                    </div>
+                    <ul id="messageArea">
+
+                    </ul>
+                    <form id="messageForm" name="messageForm" nameForm="messageForm">
+                        <div class="form-group">
+                            <div class="input-group clearfix">
+                                <input type="text" id="message" autocomplete="off" class="form-control"/>
+                                <button type="submit" class="primary">Send</button>
+                            </div>
                         </div>
-
-                        <a class="btn btn-primary" th:href="@{/index}">Go Home</a>
                     </form>
                 </div>
             </div>
-        </div>
-    </div>
 
-    <div id="table" th:if="${not #lists.isEmpty(listRooms)}">
-        <table class="table table-sm">
-            <thead class="thead-dark">
-            <tr>
-                <th>Id</th>
-                <th>RoomName</th>
-                <th>Actions</th>
-            </tr>
-            </thead>
-            <tr th:each="room : ${listRooms}" th:if="${room.isOpen()}">
-                <td th:text="${room.roomId}" id="roomId"></td>
-                <td th:text="${room.roomName}"></td>
-                <!--<td th:if="${room.password.isEmpty()}">NO</td>
-                <td th:if="${!room.password.isEmpty()}">YES</td>-->
-                <td>
-                    <button class="btn btn-outline-dark" type="button" th:value="${room.roomId}" onclick="join2room(this)">Join</button>
-                    <a class="btn btn-outline-dark" th:href="@{/room/edit(roomId=${room.roomId})}">Rename</a>
-                </td>
-            </tr>
-        </table>
-        <div class="container">
-            <a th:href="@{/dictionary/add}">Добавить слова</a>
-        </div>
-        <div class="container">
-            <a th:href="@{/room/add}">Добавить комнату</a>
-        </div>
-    </div>
-
-    <div id="canvas-form" class="hidden">
-
-        <div id="guess">
-            <h4 id="guess-window-id" class="hidden"></h4>
-            <h4 id="guess-window-open-id"></h4>
-        </div>
-
-        <div id="draw">
-            <canvas id="drawing" th:width="600" th:height="600" style="pointer-events: none; border: 1px solid black" ></canvas>
-            <div id="canvas-buttons">
-                <button id="resetButton" class="btn btn-light" disabled>Clear</button>
-                <button id="red" type="submit" class="btn btn-outline-danger">R</button>
-                <button id="green" type="submit" class="btn btn-outline-success">G</button>
-                <button id="blue" type="submit" class="btn btn-outline-primary" >B</button>
-                <button id="yellow" type="submit" class="btn btn-outline-warning" >Y</button>
-                <button id="black" type="submit" class="btn btn-outline-dark">B</button>
-            </div>
-        </div>
-
-        <div id="chat-page" class="hidden">
-            <div class="chat-container">
-                <div class="chat-header">
-                    <h2>Chatroom [<span id="room-id-display"></span>]</h2>
-                    <h2 class="hidden">Guess [<span id="guess-id-display"></span>]</h2>
-                    <span id="timer1">02:00</span>
-                </div>
-                <div class="connecting">
-                    Connecting...
-                </div>
-                <ul id="messageArea">
+            <div id="currentUsers" class="container">
+                <ul id="userlist" class="hidden">
 
                 </ul>
-                <form id="messageForm" name="messageForm" nameForm="messageForm">
-                    <div class="form-group">
-                        <div class="input-group clearfix">
-                            <input type="text" id="message" autocomplete="off" class="form-control"/>
-                            <button type="submit" class="primary">Send</button>
-                        </div>
-                    </div>
-                </form>
             </div>
         </div>
 
-        <div id="currentUsers" class="container">
-            <ul id="userlist" class="hidden">
-
-            </ul>
-        </div>
     </div>
-
 </div>
+
+
 <script th:src="@{/js/main.js}"></script>
 <script th:src="@{/js/canvas.js}"></script>
 <script th:src="@{/js/connection.js}"></script>

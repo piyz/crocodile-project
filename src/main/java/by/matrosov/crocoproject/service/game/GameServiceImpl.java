@@ -1,9 +1,7 @@
 package by.matrosov.crocoproject.service.game;
 
 import by.matrosov.crocoproject.model.Dictionary;
-import by.matrosov.crocoproject.model.Room;
 import by.matrosov.crocoproject.repository.DictionaryRepository;
-import by.matrosov.crocoproject.service.room.RoomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

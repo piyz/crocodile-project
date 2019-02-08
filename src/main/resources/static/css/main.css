@@ -106,6 +106,14 @@ button.primary {
     border-bottom: 1px solid #e9ecef;
 }
 
+#table{
+    text-align: center;
+}
+
+#timer2{
+    margin-left: 43%;
+}
+
 #guess-button-id-1{
     width: 266px;
 }
@@ -139,8 +147,8 @@ button.primary {
 }
 
 .form-signin{
-    width: 25%;
-    position: absolute;
-    top: 33%;
-    left: 37%;
+    width: 300px;
+    height: 300px;
+    margin: auto;
+    padding-top: 15%;
 }
