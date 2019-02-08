@@ -55,9 +55,9 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="https://example.com" id="dropdown10" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span id="username" th:utext="${username}"></span></a>
                     <div class="dropdown-menu" aria-labelledby="dropdown09">
-                        <a class="dropdown-item" href="#">Action</a>
-                        <a class="dropdown-item" href="#">Another action</a>
-                        <a class="dropdown-item" href="#">Something else here</a>
+                        <a class="dropdown-item" href="#">Profile</a>
+                        <a class="dropdown-item" th:href="@{/dictionary/add}">Add words</a>
+                        <a class="dropdown-item" th:href="@{/room/add}">Add rooms</a>
                         <a class="dropdown-item" th:href="@{/logout}">Logout</a>
                     </div>
                 </li>
@@ -129,12 +129,6 @@
                     </td>
                 </tr>
             </table>
-            <div class="container">
-                <a th:href="@{/dictionary/add}">Добавить слова</a>
-            </div>
-            <div class="container">
-                <a th:href="@{/room/add}">Добавить комнату</a>
-            </div>
         </div>
 
         <div id="canvas-form" class="hidden">
@@ -232,6 +226,9 @@
 
             </div>
             <!-- Grid row-->
+            <div class="row">
+
+            </div>
 
         </div>
         <!-- Footer Elements -->
