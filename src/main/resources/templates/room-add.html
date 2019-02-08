@@ -17,7 +17,7 @@
 
         <div class="form-group">
             <input type="text" class="form-control" placeholder="Enter room name" th:field="*{roomName}"/>
-            <label th:if="${#fields.hasErrors('roomName')}" th:errors="*{roomName}"></label>
+            <label class="alert alert-danger" th:if="${#fields.hasErrors('roomName')}" th:errors="*{roomName}"></label>
         </div>
 
         <button type="submit" class="btn btn-primary">Submit</button>
