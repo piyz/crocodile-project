@@ -64,7 +64,9 @@ public class WebSocketEventListener {
             gameService.removeUser(username, roomId);
 
             //update score
-            updateScore(roomId);
+            try{
+                updateScore(roomId);
+            }catch (NullPointerException ignored){ }
 
             //notify about left from the room
             roomLeft(username, roomId);

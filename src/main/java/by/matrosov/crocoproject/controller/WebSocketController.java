@@ -36,7 +36,7 @@ public class WebSocketController {
     @MessageMapping("/chat/table")
     public void updateTable(@Payload ChatMessage chatMessage) {
         //close room
-        roomService.changeRoomState(Integer.parseInt(chatMessage.getContent()));
+        roomService.changeRoomState(Long.parseLong(chatMessage.getContent()));
         messagingTemplate.convertAndSend("/topic/table", chatMessage);
     }
 

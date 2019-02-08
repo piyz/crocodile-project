@@ -10,7 +10,7 @@ let messageForm = id("messageForm");
 let messageInput = id("message");
 let messageArea = id("messageArea");
 let roomIdDisplay = id("room-id-display");
-let guessIdDisplay = id("guess-id-display"); guessIdDisplay.textContent = "test"; //for test
+let guessIdDisplay = id("guess-id-display"); guessIdDisplay.textContent = "/start"; //for test
 let tableForm = id("table");
 let unsubButton = id("unsubscribe");
 let userList = id("userlist");
@@ -81,7 +81,7 @@ function unsubscribe() {
 
     //clear open-guess
     guessOpened.innerHTML = '';
-    guessIdDisplay.textContent = "test";
+    guessIdDisplay.textContent = "/start";
     guess.innerHTML = "";
 
     inGame = false;
@@ -117,7 +117,7 @@ function sendMessage(event) {
             context.strokeStyle = "#000000";
 
             //start the game
-            if (chatMessage.content === 'test' && inGame === false){
+            if (chatMessage.content === '/start' && inGame === false){
                 inGame = true;
                 stompClient.send(`/app/chat/table`, {}, JSON.stringify({content : roomId}));
             }
