@@ -31,7 +31,6 @@ let timer1 = id("timer1"); // game
 let timer2 = id("timer2"); // modal
 
 // guess
-let guess = id("guess-window-id");
 let guessOpened = id("guess-window-open-id");
 let gameInterval;
 
@@ -82,7 +81,6 @@ function unsubscribe() {
     //clear open-guess
     guessOpened.innerHTML = '';
     guessIdDisplay.textContent = "/start";
-    guess.innerHTML = "";
 
     inGame = false;
     drawUser = null;

@@ -41,7 +41,7 @@ function onDraw(payload){
 }
 
 function onChangeGuess(payload) {
-    guess.innerHTML = '';
+
     guessOpened.innerHTML = '';
 
     let content = JSON.parse(payload.body).content;
@@ -55,7 +55,6 @@ function onChangeGuess(payload) {
 
     let word = content.split("#")[0];
     for (let i = 0; i < word.length; i++) {
-        guess.appendChild(document.createElement('span').appendChild(document.createTextNode(word.charAt(i))));
         guessOpened.appendChild(document.createElement('span').appendChild(document.createTextNode(" _ ")));
     }
 
@@ -79,8 +78,8 @@ function onChangeGuess(payload) {
             timer--;
             if (timer < 0) {
                 //time is over
-                clearInterval(gameInterval);
-                changeGameState();
+                //clearInterval(gameInterval);
+                //changeGameState();
             } else if (timer < 90 && count === 0){
                 //open first letter
                 guessOpened.childNodes[randoms[count]].textContent = " " + word.charAt(randoms[count]) + " ";
