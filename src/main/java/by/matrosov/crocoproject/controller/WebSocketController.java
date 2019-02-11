@@ -14,8 +14,7 @@ import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Controller;
 
 import java.security.Principal;
-import java.util.Arrays;
-import java.util.Random;
+import java.util.*;
 
 @Controller
 public class WebSocketController {
@@ -94,32 +93,6 @@ public class WebSocketController {
         messagingTemplate.convertAndSendToUser(name, "/queue/canvas", chatMessage);
     }
 
-    @MessageMapping("/chat/{roomId}/timeOver")
-    public void timeOver(@DestinationVariable String roomId, @Payload ChatMessage chatMessage, Principal principal){
-
-        //get prev user
-        String prevUser = chatMessage.getContent();
-
-        //next user
-        String name;
-
-        //set prev user to disable canvas
-        messagingTemplate.convertAndSendToUser(prevUser, "/queue/canvas", chatMessage);
-        name = gameService.getNextUser(prevUser, roomId);
-        gameService.print();
-
-        //send modal window
-        chatMessage.setContent(gameService.getRandomWords());
-        messagingTemplate.convertAndSendToUser(name, "/queue/sendModal", chatMessage);
-
-        // set current user to DRAWING
-        chatMessage.setSender(name);
-        messagingTemplate.convertAndSend(String.format("/topic/%s/changeDrawUser", roomId), chatMessage);
-
-        //set current user to enable canvas
-        messagingTemplate.convertAndSendToUser(name, "/queue/canvas", chatMessage);
-    }
-
     @MessageMapping("/chat/{roomId}/addUser")
     public void addUser(@DestinationVariable String roomId, @Payload ChatMessage chatMessage, SimpMessageHeaderAccessor headerAccessor) {
         String currentRoomId = (String) headerAccessor.getSessionAttributes().put("room_id", roomId);
@@ -138,19 +111,20 @@ public class WebSocketController {
 
         String word = chatMessage.getContent();
 
-        Random random = new Random();
-        String s = "";
-        StringBuilder sb = new StringBuilder(s);
-        for (int i = 0; i < 3; i++) {
-            int r = random.nextInt(word.length());
-            while (s.contains(String.valueOf(r))){
-                r = random.nextInt(word.length());
-            }
-            sb.append(r);
+        //get indexes for letters which will be open
+        List<Integer> list = new ArrayList<>();
+        for (int i = 0; i < word.length(); i++) {
+            list.add(i);
+        }
+        Collections.shuffle(list);
+
+        String result = word + "#";
+        StringBuilder sb = new StringBuilder(result);
+        for (Integer integer : list) {
+            sb.append(integer);
         }
 
-        String resultContent = word + "#" + sb;
-        chatMessage.setContent(resultContent);
+        chatMessage.setContent(sb.toString());
 
         messagingTemplate.convertAndSend(String.format("/topic/%s/changeGuess", roomId), chatMessage);
     }

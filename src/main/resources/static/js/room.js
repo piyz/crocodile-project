@@ -59,11 +59,11 @@ function onChangeGuess(payload) {
     }
 
     jQuery(function ($) {
-        let twoMinutes = 60 * 2, display = $('#timer1');
-        startGameTimer(twoMinutes, display);
+        let zeroMinutes = 0, display = $('#timer1');
+        startGameTimer(zeroMinutes, display);
     });
 
-    let count = 0;
+    let i = 1;
     function startGameTimer(duration, display) {
         let timer = duration, minutes, seconds;
         gameInterval = setInterval(function () {
@@ -75,42 +75,14 @@ function onChangeGuess(payload) {
 
             display.text(minutes + ":" + seconds);
 
-            timer--;
-            if (timer < 0) {
-                //time is over
-                //clearInterval(gameInterval);
-                //changeGameState();
-            } else if (timer < 90 && count === 0){
-                //open first letter
-                guessOpened.childNodes[randoms[count]].textContent = " " + word.charAt(randoms[count]) + " ";
-                count++;
-            } else if (timer < 60 && count === 1){
-                //open second letter
-                guessOpened.childNodes[randoms[count]].textContent = " " + word.charAt(randoms[count]) + " ";
-                count++;
-            } else if (timer < 30 && count === 2){
-                //open third letter
-                guessOpened.childNodes[randoms[count]].textContent = " " + word.charAt(randoms[count]) + " ";
-                count++;
+            timer++;
+            if (timer === i * 30 && (i - 1) < word.length){
+                guessOpened.childNodes[randoms[i - 1]].textContent = " " + word.charAt(randoms[i - 1]) + " ";
+                i++;
             }
+
         }, 1000);
     }
-}
-
-function changeGameState(){
-
-    //clear guess display
-    stompClient.send(`${path}/guessDisplay`);
-
-    //TODO reset color
-
-    //reset timer
-    stompClient.send(`${path}/timer`);
-
-    stompClient.send(`${path}/timeOver`, {}, JSON.stringify({
-        content : drawUser,
-        type: 'GUESS'
-    }));
 }
 
 function onMessageReceived(payload) {
@@ -211,7 +183,7 @@ function onScore(payload) {
 
 function onTimer() {
     clearInterval(gameInterval);
-    timer1.innerText = "02:00";
+    timer1.innerText = "00:00";
 }
 
 function onClearGuessDisplay() {

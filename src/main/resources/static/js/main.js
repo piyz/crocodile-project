@@ -146,9 +146,3 @@ resetButton.addEventListener("click", clearCanvas);
 
 //disable back button in browser
 window.onbeforeunload = function() { return "Your work will be lost."; };
-window.console.log = function(){
-    //console.error('Sorry , developers tools are blocked here....');
-    window.console.log = function() {
-        return false;
-    }
-};
