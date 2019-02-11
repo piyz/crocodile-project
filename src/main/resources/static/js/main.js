@@ -12,7 +12,6 @@ let messageArea = id("messageArea");
 let roomIdDisplay = id("room-id-display");
 let guessIdDisplay = id("guess-id-display"); guessIdDisplay.textContent = "/start"; //for test
 let tableForm = id("table");
-let unsubButton = id("unsubscribe");
 let userList = id("userlist");
 let resetButton = id("resetButton");
 
@@ -44,52 +43,6 @@ let scoreSubscription;
 let timerSubscription;
 let guessIdDisplaySubscription;
 let resetCanvasSubscription;
-
-function unsubscribe() {
-    messageReceivedSubscription.unsubscribe();
-    changeGuessSubscription.unsubscribe();
-    changeDrawUserSubscription.unsubscribe();
-    endSubscription.unsubscribe();
-    drawSubscription.unsubscribe();
-    scoreSubscription.unsubscribe();
-    timerSubscription.unsubscribe();
-    guessIdDisplaySubscription.unsubscribe();
-    resetCanvasSubscription.unsubscribe();
-
-    canvasForm.classList.add('hidden');
-    unsubButton.classList.add('hidden');
-    tableForm.classList.remove('hidden');
-    chatPage.classList.add('hidden');
-    userList.classList.add('hidden');
-
-    //clear chatting before
-    messageArea.innerHTML = '';
-
-    //clear score
-    userList.innerText = "";
-
-    //clear canvas
-    context.clearRect(0, 0, canvas.width, canvas.height);
-
-    //enable input message and reset button
-    messageInput.disabled = false;
-    resetButton.disabled = true;
-
-    //clear timer
-    timer1.innerText = "02:00";
-
-    //clear open-guess
-    guessOpened.innerHTML = '';
-    guessIdDisplay.textContent = "/start";
-
-    inGame = false;
-    drawUser = null;
-
-    clearInterval(gameInterval);
-
-    //TODO disable canvas
-    canvas.style['pointer-events'] = 'none';
-}
 
 function clearCanvas() {
     stompClient.send(`${path}/resetCanvas`);
@@ -141,8 +94,11 @@ function sendMessage(event) {
 }
 
 messageForm.addEventListener('submit', sendMessage, true);
-unsubButton.addEventListener("click", unsubscribe);
 resetButton.addEventListener("click", clearCanvas);
 
-//disable back button in browser
-window.onbeforeunload = function() { return "Your work will be lost."; };
+window.console.log = function(){
+    //console.error('Sorry , developers tools are blocked here....');
+    window.console.log = function() {
+        return false;
+    }
+};

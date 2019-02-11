@@ -6,7 +6,6 @@ function join2room(event) {
 
     tableForm.classList.add('hidden');
     canvasForm.classList.remove('hidden');
-    unsubButton.classList.remove('hidden');
     chatPage.classList.remove('hidden');
     userList.classList.remove('hidden');
 
