@@ -38,6 +38,10 @@ function onModalWindow(payload) {
 
         stompClient.send(`${path}/changeGuess`, {}, JSON.stringify({content : guessButton1.textContent}));
         $('#myModal').modal('hide');
+
+        guessButton1.style.display = "block";
+        guessButton2.style.display = "block";
+        guessButton3.style.display = "block";
     };
 
     guessButton2.onclick = function () {
@@ -46,6 +50,10 @@ function onModalWindow(payload) {
 
         stompClient.send(`${path}/changeGuess`, {}, JSON.stringify({content : guessButton2.textContent}));
         $('#myModal').modal('hide');
+
+        guessButton1.style.display = "block";
+        guessButton2.style.display = "block";
+        guessButton3.style.display = "block";
     };
 
     guessButton3.onclick = function () {
@@ -54,6 +62,10 @@ function onModalWindow(payload) {
 
         stompClient.send(`${path}/changeGuess`, {}, JSON.stringify({content : guessButton3.textContent}));
         $('#myModal').modal('hide');
+
+        guessButton1.style.display = "block";
+        guessButton2.style.display = "block";
+        guessButton3.style.display = "block";
     };
 
     jQuery(function ($) {
@@ -75,13 +87,23 @@ function onModalWindow(payload) {
 
             if (--timer < 0) {
                 clearInterval(interval);
-                timer2.innerText = "00:05";
 
-                let random = Math.floor(Math.random() * 3);
-                stompClient.send(`${path}/changeGuess`, {}, JSON.stringify({content : message.content.split(",")[random]}));
+                let random = Math.floor(Math.random() * 3) + 1;
+                timer2.innerText = "";
+                if (random === 1){
+                    guessButton2.style.display = "none";
+                    guessButton3.style.display = "none";
+                } else if (random === 2) {
+                    guessButton1.style.display = "none";
+                    guessButton3.style.display = "none";
+                } else {
+                    guessButton1.style.display = "none";
+                    guessButton3.style.display = "none";
+                }
 
-                $('#myModal').modal('hide');
+                setTimeout(function(){}, 100000); //hm?
             }
+
         }, 1000);
     }
 }
