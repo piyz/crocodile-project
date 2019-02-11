@@ -1,8 +1,8 @@
-## crocodile-game (Spring boot, data jpa, security, websockets + postgresql)
+## crocodile-game
 
 ------
 
-1. Register a new user. (or use an existing one)
+1. Register a new user (or use an existing one).
 
 2. Join to any room with someone.
 ![8](https://user-images.githubusercontent.com/23150134/52511210-09619600-2c10-11e9-8a7e-efc2660aad30.png)
