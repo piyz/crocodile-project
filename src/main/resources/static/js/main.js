@@ -10,7 +10,11 @@ let messageForm = id("messageForm");
 let messageInput = id("message");
 let messageArea = id("messageArea");
 let roomIdDisplay = id("room-id-display");
-let guessIdDisplay = id("guess-id-display"); guessIdDisplay.textContent = "/start"; //for test
+let guessIdDisplay = id("guess-id-display");
+
+guessIdDisplay.textContent = "/start"; //for test
+guessIdDisplay.style.display = "none"; //hide this shit
+
 let tableForm = id("table");
 let userList = id("userlist");
 let resetButton = id("resetButton");
