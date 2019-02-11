@@ -87,7 +87,7 @@ function sendMessage(event) {
             }));
 
             //update score
-            stompClient.send(`${path}/score`);
+            //stompClient.send(`${path}/score`);
 
         } else {
             stompClient.send(`${path}/sendMessage`, {}, JSON.stringify(chatMessage));

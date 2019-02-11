@@ -76,10 +76,15 @@ public class WebSocketController {
                 messagingTemplate.convertAndSendToUser(prevUser, "/queue/canvas", chatMessage);
                 name = gameService.getNextUser(prevUser, roomId);
             }
-            gameService.print();
+            gameService.print(); //update score?
         }else {
             name = principal.getName();
         }
+
+        //update score
+        ScoreMessage scoreMessage = new ScoreMessage();
+        scoreMessage.setUsersScore(gameService.getScore(roomId));
+        messagingTemplate.convertAndSend(String.format("/topic/%s/score", roomId), scoreMessage);
 
         //send modal window
         chatMessage.setContent(gameService.getRandomWords());
@@ -140,13 +145,6 @@ public class WebSocketController {
         drawMessage.setColor("#" + chatMessage.getContent().split("#")[2]);
 
         messagingTemplate.convertAndSend(String.format("/topic/%s/draw", roomId), drawMessage);
-    }
-
-    @MessageMapping("/chat/{roomId}/score")
-    public void getScore(@DestinationVariable String roomId){
-        ScoreMessage scoreMessage = new ScoreMessage();
-        scoreMessage.setUsersScore(gameService.getScore(roomId));
-        messagingTemplate.convertAndSend(String.format("/topic/%s/score", roomId), scoreMessage);
     }
 
     @MessageMapping("/chat/{roomId}/guessDisplay")
