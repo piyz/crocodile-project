@@ -3,6 +3,7 @@ let id = id => document.getElementById(id);
 
 let drawUser = null;
 let inGame = false;
+let guess = "/start";
 
 let username = id("username").innerHTML;
 let chatPage = id("chat-page");
@@ -10,10 +11,6 @@ let messageForm = id("messageForm");
 let messageInput = id("message");
 let messageArea = id("messageArea");
 let roomIdDisplay = id("room-id-display");
-let guessIdDisplay = id("guess-id-display");
-
-guessIdDisplay.textContent = "/start"; //for test
-guessIdDisplay.style.display = "none"; //hide this shit
 
 let tableForm = id("table");
 let userList = id("userlist");
@@ -61,7 +58,7 @@ function sendMessage(event) {
             type: 'CHAT'
         };
 
-        if (chatMessage.content === guessIdDisplay.textContent) {
+        if (chatMessage.content === guess) {
 
             let answer = chatMessage.content;
 

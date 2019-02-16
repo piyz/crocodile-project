@@ -62,6 +62,11 @@ public class CrocoController {
 
     @RequestMapping(value = "/index", method = RequestMethod.GET)
     public String index(Model model, Principal principal){
+
+        //TODO error handler here
+        //Object securityContext = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        //internal server error here
+
         String username = principal.getName(); //NPE here?
         if (username == null || username.isEmpty()){
             return "redirect:/login";

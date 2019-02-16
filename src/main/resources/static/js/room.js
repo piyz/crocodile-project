@@ -45,7 +45,7 @@ function onChangeGuess(payload) {
 
     let content = JSON.parse(payload.body).content;
 
-    guessIdDisplay.textContent = content.split("#")[0];
+    guess = content.split("#")[0];
 
     let randoms = [];
     for (let i = 0; i < content.split("#")[1].length; i++) {
@@ -148,7 +148,7 @@ function onEnd(payload) {
 
     $('#endModal').modal({backdrop: 'static', keyboard: false});
 
-    guessIdDisplay.textContent = '';
+    guess = "";
     endModal.style.display = "block";
 
     //unsub from all
@@ -186,7 +186,7 @@ function onTimer() {
 }
 
 function onClearGuessDisplay() {
-    guessIdDisplay.textContent = "";
+    guess = "";
 }
 
 function onClearCanvas() {

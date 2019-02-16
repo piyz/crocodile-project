@@ -98,7 +98,7 @@ function onModalWindow(payload) {
                     guessButton3.style.display = "none";
                 } else {
                     guessButton1.style.display = "none";
-                    guessButton3.style.display = "none";
+                    guessButton2.style.display = "none";
                 }
 
                 setTimeout(function(){}, 100000); //hm?
