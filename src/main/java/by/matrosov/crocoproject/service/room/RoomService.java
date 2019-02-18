@@ -11,7 +11,7 @@ public interface RoomService {
     void changeRoomState(long roomid);
     void save(Room room);
     void update(Room room, long roomid);
-    void delete(long roomid);
+    void roomOnEnd(long roomid);
     Room getRoomById(long roomid);
     Room getRoomByRoomName(String roomName);
 }

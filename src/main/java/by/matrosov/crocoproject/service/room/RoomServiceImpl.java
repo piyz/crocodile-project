@@ -2,13 +2,19 @@ package by.matrosov.crocoproject.service.room;
 
 import by.matrosov.crocoproject.model.Room;
 import by.matrosov.crocoproject.repository.RoomRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.socket.server.HandshakeInterceptor;
 
+import java.util.HashSet;
 import java.util.List;
 
 @Service
 public class RoomServiceImpl implements RoomService {
+
+    private static final Logger logger = LoggerFactory.getLogger(HandshakeInterceptor.class);
 
     @Autowired
     private RoomRepository roomRepository;
@@ -45,8 +51,12 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public void delete(long roomid) {
-        roomRepository.deleteById(roomid);
+    public void roomOnEnd(long roomid) {
+        Room room = roomRepository.findRoomByRoomId(roomid);
+        room.setUsers(new HashSet<>());
+        room.setOpen(true);
+        roomRepository.save(room);
+        logger.info("game ended in room %s", roomid);
     }
 
     @Override

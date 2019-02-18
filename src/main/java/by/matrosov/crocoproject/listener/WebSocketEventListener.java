@@ -39,7 +39,6 @@ public class WebSocketEventListener {
             String username = headerAccessor.getUser().getName();
             String roomid = destination.split("/")[2];
             gameService.addUser(username, roomid);
-            //gameService.print();
         }
 
         //System.out.println(headerAccessor.getSessionId());
@@ -59,9 +58,6 @@ public class WebSocketEventListener {
         if (headerAccessor.getSubscriptionId().contains("sub-4")){
             String username = (String) headerAccessor.getSessionAttributes().get("username");
             String roomId = (String) headerAccessor.getSessionAttributes().get("room_id");
-
-            //remove from the map
-            gameService.removeUser(username, roomId);
 
             //update score
             try{
@@ -86,10 +82,10 @@ public class WebSocketEventListener {
             logger.info("User Disconnected: " + username);
             roomLeft(username, roomId);
 
-            try{
+            if (roomId != null){
                 gameService.removeUser(username, roomId);
                 updateScore(roomId);
-            }catch (NullPointerException ignored){}
+            }
         }
     }
 

@@ -60,7 +60,7 @@ public class WebSocketController {
 
         if (prevUser != null){
             //add score
-            if (gameService.addScore(prevUser, principal.getName(), roomId)){
+            if (gameService.addScore(prevUser, principal.getName())){
                 //is end
                 chatMessage.setContent(Arrays.toString(gameService.getScore(roomId))); //replace on score message
                 messagingTemplate.convertAndSend(String.format("/topic/%s/end", roomId), chatMessage);
@@ -69,14 +69,14 @@ public class WebSocketController {
                 //roomService.changeRoomState(Integer.parseInt(roomId));
                 //messagingTemplate.convertAndSend("/topic/table", chatMessage);
 
-                //delete room
-                roomService.delete(Long.parseLong(roomId));
+                //roomOnEnd room
+                roomService.roomOnEnd(Long.parseLong(roomId));
             }else {
                 //set prev user to disable canvas
                 messagingTemplate.convertAndSendToUser(prevUser, "/queue/canvas", chatMessage);
                 name = gameService.getNextUser(prevUser, roomId);
             }
-            gameService.print(); //update score?
+            //gameService.print();
         }else {
             name = principal.getName();
         }

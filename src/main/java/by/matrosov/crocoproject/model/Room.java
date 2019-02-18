@@ -1,6 +1,7 @@
 package by.matrosov.crocoproject.model;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name = "rooms")
@@ -16,6 +17,20 @@ public class Room {
 
     @Column(name = "open")
     private boolean isOpen;
+
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "rooms_users",
+            joinColumns = @JoinColumn(name = "room_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
+    private Set<User> users;
+
+    public Set<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(Set<User> users) {
+        this.users = users;
+    }
 
     public long getRoomId() {
         return roomId;
