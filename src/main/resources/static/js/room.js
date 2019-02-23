@@ -15,11 +15,9 @@ function join2room(event) {
     drawSubscription = stompClient.subscribe(`/topic/${roomId}/draw`, onDraw);
     changeGuessSubscription = stompClient.subscribe(`/topic/${roomId}/changeGuess`, onChangeGuess);
     messageReceivedSubscription = stompClient.subscribe(`/topic/${roomId}/public`, onMessageReceived);
-    changeDrawUserSubscription = stompClient.subscribe(`/topic/${roomId}/changeDrawUser`, onChangeDrawUser);
     endSubscription = stompClient.subscribe(`/topic/${roomId}/end`, onEnd);
     scoreSubscription = stompClient.subscribe(`/topic/${roomId}/score`, onScore);
     timerSubscription = stompClient.subscribe(`/topic/${roomId}/timer`, onTimer);
-    guessIdDisplaySubscription = stompClient.subscribe(`/topic/${roomId}/guessDisplay`, onClearGuessDisplay);
     resetCanvasSubscription = stompClient.subscribe(`/topic/${roomId}/resetCanvas`, onClearCanvas);
 
     stompClient.send(`${path}/addUser`, {}, JSON.stringify({sender: username, type: 'JOIN'}));
@@ -44,8 +42,6 @@ function onChangeGuess(payload) {
     guessOpened.innerHTML = '';
 
     let content = JSON.parse(payload.body).content;
-
-    guess = content.split("#")[0];
 
     let randoms = [];
     for (let i = 0; i < content.split("#")[1].length; i++) {
@@ -96,13 +92,15 @@ function onMessageReceived(payload) {
         messageElement.classList.add('event-message');
         message.content = message.sender + ' вышел!';
     } else if (message.type === "GUESS") {
-        if (message.sender.split("#")[1] === "/start") {
+
+        if (message.answer === "/start"){
             messageElement.classList.add('event-message');
-            message.content = message.sender.split("#")[0] + ' запустил игру';
-        }else {
+            message.content = message.sender + ' запустил игру';
+        } else {
             messageElement.classList.add('event-message');
-            message.content = message.sender.split("#")[0] + ' написал ' + message.sender.split("#")[1].toUpperCase();
+            message.content = message.sender + ' написал ' + message.answer.toUpperCase();
         }
+
     } else {
         messageElement.classList.add('chat-message');
 
@@ -129,14 +127,6 @@ function onMessageReceived(payload) {
     messageArea.scrollTop = messageArea.scrollHeight;
 }
 
-function onChangeDrawUser(payload) {
-    let message = JSON.parse(payload.body);
-    drawUser = message.sender;
-
-    //clear canvas
-    context.clearRect(0, 0, canvas.width, canvas.height);
-}
-
 function onEnd(payload) {
     let message = JSON.parse(payload.body);
 
@@ -148,21 +138,16 @@ function onEnd(payload) {
 
     $('#endModal').modal({backdrop: 'static', keyboard: false});
 
-    guess = "";
     endModal.style.display = "block";
 
     //unsub from all
     drawSubscription.unsubscribe();
     messageReceivedSubscription.unsubscribe();
     changeGuessSubscription.unsubscribe();
-    changeDrawUserSubscription.unsubscribe();
     endSubscription.unsubscribe();
     scoreSubscription.unsubscribe();
     timerSubscription.unsubscribe();
-    guessIdDisplaySubscription.unsubscribe();
     resetCanvasSubscription.unsubscribe();
-
-    inGame = false;
 }
 
 function onScore(payload) {
@@ -183,10 +168,6 @@ function onScore(payload) {
 function onTimer() {
     clearInterval(gameInterval);
     timer1.innerText = "00:00";
-}
-
-function onClearGuessDisplay() {
-    guess = "";
 }
 
 function onClearCanvas() {

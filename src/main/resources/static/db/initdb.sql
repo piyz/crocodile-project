@@ -20,6 +20,8 @@ create table rooms
   room_id serial primary key ,
   room_name varchar not null ,
   open boolean default true not null ,
+  drawer varchar(255) default null,
+  guess varchar(255) default '/start',
   unique (room_name)
 );
 
@@ -31,6 +33,7 @@ create table users
   password varchar not null ,
   confirm_password varchar ,
   enabled boolean default true not null ,
+  score integer default 0,
   unique (username)
 );
 
@@ -41,4 +44,13 @@ create table users_roles
   role_id integer not null ,
   foreign key (user_id) references users(user_id),
   foreign key (role_id) references roles(role_id)
+);
+
+--create rooms_user table
+create table rooms_users
+(
+  room_id integer not null ,
+  user_id integer not null ,
+  foreign key (room_id) references rooms(room_id),
+  foreign key (user_id) references users(user_id)
 );

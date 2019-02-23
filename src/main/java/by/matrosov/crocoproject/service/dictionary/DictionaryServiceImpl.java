@@ -5,6 +5,8 @@ import by.matrosov.crocoproject.repository.DictionaryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class DictionaryServiceImpl implements DictionaryService{
 
@@ -24,5 +26,10 @@ public class DictionaryServiceImpl implements DictionaryService{
     @Override
     public Dictionary findByValue(String value) {
         return dictionaryRepository.findByValue(value);
+    }
+
+    @Override
+    public List<Dictionary> getAllWords() {
+        return dictionaryRepository.findAll();
     }
 }

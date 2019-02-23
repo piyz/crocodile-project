@@ -24,6 +24,28 @@ public class Room {
             inverseJoinColumns = @JoinColumn(name = "user_id"))
     private Set<User> users;
 
+    @Column(name = "guess")
+    private String guess;
+
+    @Column(name = "drawer")
+    private String drawer;
+
+    public String getGuess() {
+        return guess;
+    }
+
+    public void setGuess(String guess) {
+        this.guess = guess;
+    }
+
+    public String getDrawer() {
+        return drawer;
+    }
+
+    public void setDrawer(String drawer) {
+        this.drawer = drawer;
+    }
+
     public Set<User> getUsers() {
         return users;
     }

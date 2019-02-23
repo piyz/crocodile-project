@@ -1,10 +1,11 @@
 package by.matrosov.crocoproject.controller;
 
-import by.matrosov.crocoproject.model.message.ChatMessage;
-import by.matrosov.crocoproject.model.message.DrawMessage;
-import by.matrosov.crocoproject.model.message.ScoreMessage;
+import by.matrosov.crocoproject.model.Room;
+import by.matrosov.crocoproject.model.message.*;
 import by.matrosov.crocoproject.service.game.GameService;
 import by.matrosov.crocoproject.service.room.RoomService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -13,11 +14,15 @@ import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Controller;
 
-import java.security.Principal;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 @Controller
 public class WebSocketController {
+    private static final Logger logger = LoggerFactory.getLogger(WebSocketController.class);
+
     @Autowired
     private SimpMessageSendingOperations messagingTemplate;
 
@@ -27,75 +32,128 @@ public class WebSocketController {
     @Autowired
     private RoomService roomService;
 
-    @MessageMapping("/chat/{roomId}/timer")
-    public void updateTimer(@DestinationVariable String roomId) {
-        messagingTemplate.convertAndSend(String.format("/topic/%s/timer", roomId), new ChatMessage());
-    }
+    @MessageMapping("/chat/{roomId}/chatMessage")
+    public void getChatMessage(@DestinationVariable String roomId, @Payload ChatMessage chatMessage){
+        String message = chatMessage.getContent();
+        String sender = chatMessage.getSender();
+        logger.info("received chat message '" + message + "' from '" + sender + "' in room '" + roomId + "'");
 
-    @MessageMapping("/chat/table")
-    public void updateTable(@Payload ChatMessage chatMessage) {
-        //close room
-        roomService.changeRoomState(Long.parseLong(chatMessage.getContent()));
-        messagingTemplate.convertAndSend("/topic/table", chatMessage);
-    }
+        if (gameService.isRightAnswer(message, roomId)){
+            logger.info("message '" + message + "' is the right answer");
 
-    @MessageMapping("/chat/{roomId}/sendMessage")
-    public void sendMessage(@DestinationVariable String roomId, @Payload ChatMessage chatMessage) {
-        messagingTemplate.convertAndSend(String.format("/topic/%s/public", roomId), chatMessage);
-    }
+            gameService.clearGuess(roomId);
 
-    @MessageMapping("/chat/{roomId}/changeDrawUser")
-    public void changeDrawUser(@DestinationVariable String roomId, @Payload ChatMessage chatMessage, Principal principal){
+            //reset pointer color to def
 
-        //get prev user
-        String prevUser = chatMessage.getContent();
-
-        //next user
-        String name = "";
-
-        //send message to the chat
-        messagingTemplate.convertAndSend(String.format("/topic/%s/public", roomId), chatMessage);
-        //remove back sender
-        chatMessage.setSender(chatMessage.getSender().split("#")[0]);
-
-        if (prevUser != null){
-            //add score
-            if (gameService.addScore(prevUser, principal.getName())){
-                //is end
-                chatMessage.setContent(Arrays.toString(gameService.getScore(roomId))); //replace on score message
-                messagingTemplate.convertAndSend(String.format("/topic/%s/end", roomId), chatMessage);
-
-                //open room
-                //roomService.changeRoomState(Integer.parseInt(roomId));
-                //messagingTemplate.convertAndSend("/topic/table", chatMessage);
-
-                //roomOnEnd room
-                roomService.roomOnEnd(Long.parseLong(roomId));
-            }else {
-                //set prev user to disable canvas
-                messagingTemplate.convertAndSendToUser(prevUser, "/queue/canvas", chatMessage);
-                name = gameService.getNextUser(prevUser, roomId);
+            if (gameService.isGameStart(message, roomId)){
+                logger.info("game started in room " + roomId);
+                updateTable(roomId);
             }
-            //gameService.print();
-        }else {
-            name = principal.getName();
+
+            updateTimer(roomId);
+            changeDrawUser(roomId, message, sender);
+
+        } else {
+            sendMessage(roomId, chatMessage);
+        }
+    }
+
+    private void changeDrawUser(String roomId, String message, String sender){
+        logger.info("change drawer in room " + roomId);
+        sendEventMessage(roomId, sender, message);
+
+        String prevUser = gameService.getDrawerUser(roomId);
+        String nextUser = "";
+        boolean isEnd = false;
+        if (prevUser != null){
+            logger.info("previous user is " + prevUser);
+
+            if (gameService.addScore(prevUser, sender)){
+                logger.info("end game in room " + roomId);
+                sendEndModalWindow(roomId);
+                roomService.roomOnEnd(Long.parseLong(roomId));
+                isEnd = true;
+            }else {
+                logger.info("continue game in room " + roomId);
+                disableCanvas(prevUser);
+
+                nextUser = gameService.getNextUser(prevUser, roomId);
+            }
+        } else {
+            logger.info("previous user is null");
+            nextUser = sender;
         }
 
-        //update score
+        if (!isEnd){
+            updateScore(roomId);
+            sendModalWindow(nextUser);
+            setDrawerUser(roomId, nextUser);
+            enableCanvas(nextUser);
+        }
+    }
+
+    private void sendEndModalWindow(String roomId){
+        ChatMessage chatMessage = new ChatMessage();
+        chatMessage.setContent(Arrays.toString(gameService.getScore(roomId))); //replace on score message
+        messagingTemplate.convertAndSend(String.format("/topic/%s/end", roomId), chatMessage);
+    }
+
+    private void disableCanvas(String prevUser){
+        messagingTemplate.convertAndSendToUser(prevUser, "/queue/canvas", new ChatMessage());
+    }
+
+    private void enableCanvas(String nextUser){
+        logger.info("enable canvas for " + nextUser);
+        //empty message
+        messagingTemplate.convertAndSendToUser(nextUser, "/queue/canvas", new ChatMessage());
+    }
+
+    private void setDrawerUser(String roomId, String nextUser){
+        logger.info("change draw user in room " + roomId);
+        gameService.setDrawerUser(roomId, nextUser);
+    }
+
+    private void sendModalWindow(String nextUser){
+        logger.info("send modal window to " + nextUser);
+        //message with 3 words
+        ChatMessage chatMessage = new ChatMessage();
+        chatMessage.setContent(gameService.getRandomWords());
+        messagingTemplate.convertAndSendToUser(nextUser, "/queue/sendModal", chatMessage);
+    }
+
+    private void updateScore(String roomId){
+        logger.info("update score in room " + roomId);
         ScoreMessage scoreMessage = new ScoreMessage();
         scoreMessage.setUsersScore(gameService.getScore(roomId));
         messagingTemplate.convertAndSend(String.format("/topic/%s/score", roomId), scoreMessage);
+    }
 
-        //send modal window
-        chatMessage.setContent(gameService.getRandomWords());
-        messagingTemplate.convertAndSendToUser(name, "/queue/sendModal", chatMessage);
+    private void updateTable(String roomId){
+        logger.info("close room " + roomId);
+        roomService.changeRoomState(Long.parseLong(roomId));
+        //send empty message
+        messagingTemplate.convertAndSend("/topic/table", new ChatMessage());
+    }
 
-        // set current user to DRAWING
-        chatMessage.setSender(name);
-        messagingTemplate.convertAndSend(String.format("/topic/%s/changeDrawUser", roomId), chatMessage);
+    private void updateTimer(String roomId){
+        logger.info("update timer in room " + roomId);
+        //send empty message
+        messagingTemplate.convertAndSend(String.format("/topic/%s/timer", roomId), new ChatMessage());
+    }
 
-        //set current user to enable canvas
-        messagingTemplate.convertAndSendToUser(name, "/queue/canvas", chatMessage);
+    private void sendMessage(String roomId, ChatMessage chatMessage){
+        String message = chatMessage.getContent();
+        logger.info("send message '" + message + "' to the room '" + roomId + "'");
+        messagingTemplate.convertAndSend(String.format("/topic/%s/public", roomId), chatMessage);
+    }
+
+    private void sendEventMessage(String roomId, String sender, String message){
+        GuessMessage guessMessage = new GuessMessage();
+        guessMessage.setSender(sender);
+        guessMessage.setAnswer(message);
+        guessMessage.setType(ChatMessage.MessageType.GUESS);
+        logger.info("send event message to the room " + roomId);
+        messagingTemplate.convertAndSend(String.format("/topic/%s/public", roomId), guessMessage);
     }
 
     @MessageMapping("/chat/{roomId}/addUser")
@@ -112,9 +170,9 @@ public class WebSocketController {
     }
 
     @MessageMapping("/chat/{roomId}/changeGuess")
-    public void changeGuess(@DestinationVariable String roomId, @Payload ChatMessage chatMessage){
+    public void changeGuess(@DestinationVariable String roomId, @Payload WordMessage wordMessage){
 
-        String word = chatMessage.getContent();
+        String word = wordMessage.getWord();
 
         //get indexes for letters which will be open
         List<Integer> list = new ArrayList<>();
@@ -129,6 +187,9 @@ public class WebSocketController {
             sb.append(integer);
         }
 
+        gameService.setGuess(roomId, word);
+
+        ChatMessage chatMessage = new ChatMessage();
         chatMessage.setContent(sb.toString());
 
         messagingTemplate.convertAndSend(String.format("/topic/%s/changeGuess", roomId), chatMessage);
@@ -147,13 +208,13 @@ public class WebSocketController {
         messagingTemplate.convertAndSend(String.format("/topic/%s/draw", roomId), drawMessage);
     }
 
-    @MessageMapping("/chat/{roomId}/guessDisplay")
-    public void clearGuessDisplay(@DestinationVariable String roomId){
-        messagingTemplate.convertAndSend(String.format("/topic/%s/guessDisplay", roomId), new ChatMessage());
-    }
-
     @MessageMapping("/chat/{roomId}/resetCanvas")
-    public void resetCanvas(@DestinationVariable String roomId){
-        messagingTemplate.convertAndSend(String.format("/topic/%s/resetCanvas", roomId), new ChatMessage());
+    public void resetCanvas(@DestinationVariable String roomId, SimpMessageHeaderAccessor headerAccessor){
+        Room room = roomService.getRoomById(Long.parseLong(roomId));
+        String drawer = room.getDrawer();
+
+        if (headerAccessor.getUser().getName().equals(drawer)){
+            messagingTemplate.convertAndSend(String.format("/topic/%s/resetCanvas", roomId), new ChatMessage());
+        }
     }
 }

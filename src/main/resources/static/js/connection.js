@@ -36,7 +36,7 @@ function onModalWindow(payload) {
         clearInterval(interval);
         id("timer2").innerText = "00:05";
 
-        stompClient.send(`${path}/changeGuess`, {}, JSON.stringify({content : guessButton1.textContent}));
+        stompClient.send(`${path}/changeGuess`, {}, JSON.stringify({word : guessButton1.textContent}));
         $('#myModal').modal('hide');
 
         guessButton1.style.display = "block";
@@ -48,7 +48,7 @@ function onModalWindow(payload) {
         clearInterval(interval);
         id("timer2").innerText = "00:05";
 
-        stompClient.send(`${path}/changeGuess`, {}, JSON.stringify({content : guessButton2.textContent}));
+        stompClient.send(`${path}/changeGuess`, {}, JSON.stringify({word : guessButton2.textContent}));
         $('#myModal').modal('hide');
 
         guessButton1.style.display = "block";
@@ -60,7 +60,7 @@ function onModalWindow(payload) {
         clearInterval(interval);
         id("timer2").innerText = "00:05";
 
-        stompClient.send(`${path}/changeGuess`, {}, JSON.stringify({content : guessButton3.textContent}));
+        stompClient.send(`${path}/changeGuess`, {}, JSON.stringify({word : guessButton3.textContent}));
         $('#myModal').modal('hide');
 
         guessButton1.style.display = "block";

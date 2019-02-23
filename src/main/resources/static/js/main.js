@@ -1,10 +1,6 @@
 // small helper function for selecting element by id
 let id = id => document.getElementById(id);
 
-let drawUser = null;
-let inGame = false;
-let guess = "/start";
-
 let username = id("username").innerHTML;
 let chatPage = id("chat-page");
 let messageForm = id("messageForm");
@@ -37,12 +33,10 @@ let gameInterval;
 // subscriptions
 let messageReceivedSubscription;
 let changeGuessSubscription;
-let changeDrawUserSubscription;
 let endSubscription;
 let drawSubscription;
 let scoreSubscription;
 let timerSubscription;
-let guessIdDisplaySubscription;
 let resetCanvasSubscription;
 
 function clearCanvas() {
@@ -57,38 +51,7 @@ function sendMessage(event) {
             content: messageInput.value,
             type: 'CHAT'
         };
-
-        if (chatMessage.content === guess) {
-
-            let answer = chatMessage.content;
-
-            //clear guessdidsplay
-            stompClient.send(`${path}/guessDisplay`);
-
-            //reset color to def
-            context.strokeStyle = "#000000";
-
-            //start the game
-            if (chatMessage.content === '/start' && inGame === false){
-                inGame = true;
-                stompClient.send(`/app/chat/table`, {}, JSON.stringify({content : roomId}));
-            }
-
-            //reset timer
-            stompClient.send(`${path}/timer`);
-
-            stompClient.send(`${path}/changeDrawUser`, {}, JSON.stringify({
-                sender: username + "#" + answer,
-                content : drawUser,
-                type: 'GUESS'
-            }));
-
-            //update score
-            //stompClient.send(`${path}/score`);
-
-        } else {
-            stompClient.send(`${path}/sendMessage`, {}, JSON.stringify(chatMessage));
-        }
+        stompClient.send(`${path}/chatMessage`, {}, JSON.stringify(chatMessage));
     }
     messageInput.value = '';
     event.preventDefault();
