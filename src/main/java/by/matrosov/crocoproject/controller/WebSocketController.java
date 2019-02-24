@@ -158,15 +158,21 @@ public class WebSocketController {
 
     @MessageMapping("/chat/{roomId}/addUser")
     public void addUser(@DestinationVariable String roomId, @Payload ChatMessage chatMessage, SimpMessageHeaderAccessor headerAccessor) {
-        String currentRoomId = (String) headerAccessor.getSessionAttributes().put("room_id", roomId);
-        if (currentRoomId != null) {
-            ChatMessage leaveMessage = new ChatMessage();
-            leaveMessage.setType(ChatMessage.MessageType.LEAVE);
-            leaveMessage.setSender(chatMessage.getSender());
-            messagingTemplate.convertAndSend(String.format("/topic/%s/public", currentRoomId), leaveMessage);
+
+        if (headerAccessor.getSessionAttributes().get("room_id") == null){
+
+            String currentRoomId = (String) headerAccessor.getSessionAttributes().put("room_id", roomId);
+
+            if (currentRoomId != null) {
+                ChatMessage leaveMessage = new ChatMessage();
+                leaveMessage.setType(ChatMessage.MessageType.LEAVE);
+                leaveMessage.setSender(chatMessage.getSender());
+                messagingTemplate.convertAndSend(String.format("/topic/%s/public", currentRoomId), leaveMessage);
+            }
+
+            headerAccessor.getSessionAttributes().put("username", chatMessage.getSender());
+            messagingTemplate.convertAndSend(String.format("/topic/%s/public", roomId), chatMessage);
         }
-        headerAccessor.getSessionAttributes().put("username", chatMessage.getSender());
-        messagingTemplate.convertAndSend(String.format("/topic/%s/public", roomId), chatMessage);
     }
 
     @MessageMapping("/chat/{roomId}/changeGuess")

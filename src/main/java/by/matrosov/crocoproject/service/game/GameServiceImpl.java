@@ -59,7 +59,7 @@ public class GameServiceImpl implements GameService {
         User user = userService.getUserByUsername(username);
 
         Set<User> usersSet = room.getUsers();
-        if (usersSet.size() == 1){
+        if (usersSet.size() == 1 && !room.isOpen()){
             room.setUsers(new HashSet<>());
             roomService.delete(room);
             logger.info("delete room " + roomid);
