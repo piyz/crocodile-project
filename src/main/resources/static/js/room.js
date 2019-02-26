@@ -152,17 +152,32 @@ function onEnd(payload) {
 
 function onScore(payload) {
     let message = JSON.parse(payload.body);
+
+    //clear previous user list
     userList.innerHTML = "";
+
+    let drawer = message.drawer;
     let users = message.usersScore;
+
     for (let i = 0; i < users.length; i++) {
+
         let messageElement = document.createElement('li');
-        //messageElement.classList.add();
         let usernameElement = document.createElement('span');
         let usernameText = document.createTextNode(users[i]);
+
+        //colored drawer user
+        if (users[i].includes(drawer)){
+            messageElement.style.color = "red";
+            usernameElement.id = "drawer";
+        }
+
         usernameElement.appendChild(usernameText);
         messageElement.appendChild(usernameElement);
         userList.appendChild(messageElement);
     }
+
+    //colored drawer user
+    id("drawer").style.color = "red";
 }
 
 function onTimer() {

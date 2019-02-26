@@ -85,7 +85,7 @@ public class WebSocketController {
         }
 
         if (!isEnd){
-            updateScore(roomId);
+            updateScore(roomId, nextUser);
             sendModalWindow(nextUser);
             setDrawerUser(roomId, nextUser);
             enableCanvas(nextUser);
@@ -121,10 +121,13 @@ public class WebSocketController {
         messagingTemplate.convertAndSendToUser(nextUser, "/queue/sendModal", chatMessage);
     }
 
-    private void updateScore(String roomId){
+    private void updateScore(String roomId, String drawer){
         logger.info("update score in room " + roomId);
         ScoreMessage scoreMessage = new ScoreMessage();
         scoreMessage.setUsersScore(gameService.getScore(roomId));
+
+        scoreMessage.setDrawer(drawer);
+        logger.info(drawer + " colored on list");
         messagingTemplate.convertAndSend(String.format("/topic/%s/score", roomId), scoreMessage);
     }
 
