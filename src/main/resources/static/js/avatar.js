@@ -11,3 +11,13 @@ function getAvatarColor(messageSender) {
     let index = Math.abs(hash % colors.length);
     return colors[index];
 }
+
+function getAvatarEmotion(fontAwesome, i, users) {
+    if (i === 0){
+        fontAwesome.className = "far fa-smile";
+    }else if (i === users.length - 1){
+        fontAwesome.className = "far fa-frown";
+    }else {
+        fontAwesome.className = "far fa-meh";
+    }
+}

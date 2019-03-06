@@ -24,19 +24,6 @@ function join2room(event) {
     stompClient.send(`${path}/score`);
 }
 
-function onDraw(payload){
-    let message = JSON.parse(payload.body);
-
-    context.lineCap = 'round';
-    context.lineWidth = 3;
-    context.strokeStyle = message.color;
-
-    context.beginPath();
-    context.moveTo(message.x1 * width, message.y1 * height);
-    context.lineTo(message.x2 * width,message.y2 * height);
-    context.stroke();
-}
-
 function onChangeGuess(payload) {
 
     guessOpened.innerHTML = '';
@@ -163,7 +150,10 @@ function onScore(payload) {
 
         let messageElement = document.createElement('li');
         let usernameElement = document.createElement('span');
-        let usernameText = document.createTextNode(users[i]);
+        let usernameText = document.createTextNode(" " + users[i]);
+        let fontAwesome = document.createElement("i");
+
+        getAvatarEmotion(fontAwesome, i, users);
 
         //colored drawer user
         if (users[i].includes(drawer)){
@@ -172,7 +162,8 @@ function onScore(payload) {
         }
 
         usernameElement.appendChild(usernameText);
-        messageElement.appendChild(usernameElement);
+        fontAwesome.appendChild(usernameElement);
+        messageElement.appendChild(fontAwesome);
         userList.appendChild(messageElement);
     }
 

@@ -42,6 +42,19 @@ document.addEventListener("DOMContentLoaded", function() {
     mainLoop();
 });
 
+function onDraw(payload){
+    let message = JSON.parse(payload.body);
+
+    context.lineCap = 'round';
+    context.lineWidth = 5;
+    context.strokeStyle = message.color;
+
+    context.beginPath();
+    context.moveTo(message.x1 * width, message.y1 * height);
+    context.lineTo(message.x2 * width,message.y2 * height);
+    context.stroke();
+}
+
 // color buttons
 id("red").addEventListener("click", function () {context.strokeStyle = "#F00000"});
 id("yellow").addEventListener("click", function () {context.strokeStyle = "#F0DE10"});

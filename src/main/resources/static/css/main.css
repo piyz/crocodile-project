@@ -21,9 +21,13 @@ button.primary {
 }
 
 #currentUsers{
-    margin-left:350px;
+    margin-left:320px;
     position:absolute;
     display:inline-block;
+}
+
+#userlist{
+    list-style-type: none;
 }
 
 #draw{
@@ -124,26 +128,6 @@ button.primary {
 
 #guess-button-id-3{
     width: 266px;
-}
-
-#red{
-    border-radius: 50%;
-}
-
-#green{
-    border-radius: 50%;
-}
-
-#blue{
-    border-radius: 50%;
-}
-
-#yellow{
-    border-radius: 50%;
-}
-
-#black{
-    border-radius: 50%;
 }
 
 .form-signin{

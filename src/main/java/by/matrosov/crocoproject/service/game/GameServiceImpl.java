@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Stream;
 
 @Service
 public class GameServiceImpl implements GameService {
@@ -102,7 +103,12 @@ public class GameServiceImpl implements GameService {
             map.put(user.getUsername(), user.getScore());
         }
 
-        String score = Arrays.toString(map.entrySet().toArray());
+        //sorted by value(score)
+        Stream<Map.Entry<String,Integer>> sorted =
+                map.entrySet().stream()
+                        .sorted(Collections.reverseOrder(Map.Entry.comparingByValue()));
+
+        String score = Arrays.toString(sorted.toArray());
 
         return score.substring(1, score.length() - 1)
                 .replace("=", " ")
