@@ -2,7 +2,7 @@ let roomId;
 let path = null;
 
 function join2room(event) {
-    roomId = event.value;
+    roomId = event.toString();
 
     tableForm.classList.add('hidden');
     canvasForm.classList.remove('hidden');
