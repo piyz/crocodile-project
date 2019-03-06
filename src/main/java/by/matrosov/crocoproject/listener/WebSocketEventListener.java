@@ -39,6 +39,9 @@ public class WebSocketEventListener {
             String username = headerAccessor.getUser().getName();
             String roomid = destination.split("/")[2];
             gameService.addUser(username, roomid);
+
+            //update score after new user connected
+            updateScore(roomid);
         }
 
         //System.out.println(headerAccessor.getSessionId());

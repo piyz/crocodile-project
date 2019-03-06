@@ -12,11 +12,11 @@ function join2room(event) {
     roomIdDisplay.textContent = roomId;
     path = `/app/chat/${roomId}`;
 
+    scoreSubscription = stompClient.subscribe(`/topic/${roomId}/score`, onScore);
     drawSubscription = stompClient.subscribe(`/topic/${roomId}/draw`, onDraw);
     changeGuessSubscription = stompClient.subscribe(`/topic/${roomId}/changeGuess`, onChangeGuess);
     messageReceivedSubscription = stompClient.subscribe(`/topic/${roomId}/public`, onMessageReceived);
     endSubscription = stompClient.subscribe(`/topic/${roomId}/end`, onEnd);
-    scoreSubscription = stompClient.subscribe(`/topic/${roomId}/score`, onScore);
     timerSubscription = stompClient.subscribe(`/topic/${roomId}/timer`, onTimer);
     resetCanvasSubscription = stompClient.subscribe(`/topic/${roomId}/resetCanvas`, onClearCanvas);
 
@@ -168,7 +168,9 @@ function onScore(payload) {
     }
 
     //colored drawer user
-    id("drawer").style.color = "red";
+    if (id("drawer") != null){
+        id("drawer").style.color = "red";
+    }
 }
 
 function onTimer() {

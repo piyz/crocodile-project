@@ -47,7 +47,7 @@ button.primary {
 #chat-page ul {
     list-style-type: none;
     margin: auto;
-    overflow-y: scroll;
+    overflow-y: auto;
     padding: 0 20px 0 20px;
     height: calc(100% - 150px);
 }
