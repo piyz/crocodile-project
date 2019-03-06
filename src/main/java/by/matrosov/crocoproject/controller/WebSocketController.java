@@ -175,6 +175,9 @@ public class WebSocketController {
 
             headerAccessor.getSessionAttributes().put("username", chatMessage.getSender());
             messagingTemplate.convertAndSend(String.format("/topic/%s/public", roomId), chatMessage);
+
+            //update table
+            messagingTemplate.convertAndSend("/topic/table", new ChatMessage());
         }
     }
 

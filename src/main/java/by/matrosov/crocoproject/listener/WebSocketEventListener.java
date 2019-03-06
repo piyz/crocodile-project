@@ -44,6 +44,14 @@ public class WebSocketEventListener {
             updateScore(roomid);
         }
 
+        if (destination.contains("table")){
+            updateTable();
+        }
+
+        //>>> SUBSCRIBE
+        //id:sub-0
+        //destination:/topic/table
+
         //System.out.println(headerAccessor.getSessionId());
         //System.out.println(headerAccessor.getSubscriptionId());
         //System.out.println(headerAccessor.getDestination());
@@ -72,6 +80,8 @@ public class WebSocketEventListener {
 
             //remove roomId after left the room
             headerAccessor.getSessionAttributes().remove("room_id");
+
+            updateTable();
         }
     }
 
@@ -93,7 +103,15 @@ public class WebSocketEventListener {
                     logger.info("get error " + e);
                 }
             }
+
+            updateTable();
         }
+    }
+
+    private void updateTable(){
+        logger.info("update table");
+        //send empty message
+        messagingTemplate.convertAndSend("/topic/table", new ChatMessage());
     }
 
     private void roomLeft(String username, String roomId){

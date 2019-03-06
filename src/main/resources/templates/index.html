@@ -110,6 +110,7 @@
                 <tr>
                     <th>RoomId</th>
                     <th>RoomName</th>
+                    <th>Players</th>
                     <th>Password</th>
                     <th>Actions</th>
                 </tr>
@@ -117,6 +118,7 @@
                 <tr th:each="room : ${listRooms}" th:if="${room.isOpen()}">
                     <td th:text="${room.roomId}" id="roomId"></td>
                     <td th:text="${room.roomName}"></td>
+                    <td th:text="${room.getUsers().size()}"></td>
                     <td>NO</td>
                     <!--<td th:if="${room.password.isEmpty()}">NO</td>
                     <td th:if="${!room.password.isEmpty()}">YES</td>-->
